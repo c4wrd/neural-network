@@ -71,7 +71,6 @@ class Network:
 
     def backprop_output_layer(self, expected_outputs):
         layer = self.layers[-1]
-        errors = []
         for j in range(len(layer)):
             neuron = layer[j]
             error = expected_outputs[j] - neuron.output
@@ -107,7 +106,13 @@ class Network:
                     neuron.weights[j] += learning_rate * neuron.delta * inputs[j]
                 neuron.bias += learning_rate * neuron.delta
 
-    def train_regression(self, dataset, learning_rate = 0.01, num_epochs = 100):
+    def train(self, data, expected_outputs, learning_rate=0.01):
+        output = self.forward(data)
+        self.backprop_error(expected_outputs)
+        self.update_weights(data, learning_rate)
+        return output
+
+    def train_regression(self, dataset, learning_rate = 0.1, num_epochs = 100):
         """
         Train for function approximation (one linear output)
         """
@@ -116,10 +121,8 @@ class Network:
             for row in dataset:
                 inputs = row[:-1]
                 expected = row[-1]
-                output = self.forward(inputs)[0]
+                output = self.train(inputs, [expected], learning_rate)[0]
                 sum_error += (expected - output)**2
-                self.backprop_error([expected])
-                self.update_weights(inputs, learning_rate)
             print(">epoch=%d, lrate=%.3f, error=%.3f" % (epoch, learning_rate, sum_error))
 
     def train_classifier(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):
@@ -139,8 +142,6 @@ class Network:
                 expected = [0 for i in range(num_classes)]
                 expected_class = row[-1]
                 expected[expected_class] = 1
-                output = self.forward(features)
+                output = self.train(features, expected, learning_rate)
                 sum_error = sum([(expected[i] - output[i])**2 for i in range(num_classes)])
-                self.backprop_error(expected)
-                self.update_weights(features, learning_rate)
             print('>epoch=%d, lrate=%.3f, sum_error=%.3f' % (epoch, learning_rate, sum_error))
