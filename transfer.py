@@ -15,6 +15,12 @@ def linear(value):
 def linear_deriv(value):
     return 1
 
+def tanh(value):
+    return np.tanh(value)
+
+def tanh_deriv(value):
+    return 1 - tanh(value)**2
+
 TRANSFER_FUNCTIONS = {
     "logistic": {
         FUNCTION: logistic,
@@ -23,5 +29,9 @@ TRANSFER_FUNCTIONS = {
     "linear": {
         FUNCTION: linear,
         DERIVATIVE: linear_deriv 
+    },
+    "tanh": {
+        FUNCTION: tanh,
+        DERIVATIVE: tanh_deriv
     }
 }
