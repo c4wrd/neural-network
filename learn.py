@@ -112,7 +112,12 @@ class Network:
         self.update_weights(data, learning_rate)
         return output
 
-    def train_regression(self, dataset, learning_rate = 0.1, num_epochs = 100):
+class NeuralNetworkTrainer:
+
+    def __init__(self, network: Network):
+        self.network = network
+
+    def train_linear_regression(self, dataset, num_epochs=1000, learning_rate = 0.1):
         """
         Train for function approximation (one linear output)
         """
@@ -121,11 +126,11 @@ class Network:
             for row in dataset:
                 inputs = row[:-1]
                 expected = row[-1]
-                output = self.train(inputs, [expected], learning_rate)[0]
+                output = self.network.train(inputs, [expected], learning_rate)[0]
                 sum_error += (expected - output)**2
             print(">epoch=%d, lrate=%.3f, error=%.3f" % (epoch, learning_rate, sum_error))
 
-    def train_classifier(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):
+    def train_classification(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):
         """
         Trains the network on the dataset, given the dataset is in the format
         [
@@ -142,6 +147,6 @@ class Network:
                 expected = [0 for i in range(num_classes)]
                 expected_class = row[-1]
                 expected[expected_class] = 1
-                output = self.train(features, expected, learning_rate)
+                output = self.network.train(features, expected, learning_rate)
                 sum_error = sum([(expected[i] - output[i])**2 for i in range(num_classes)])
             print('>epoch=%d, lrate=%.3f, sum_error=%.3f' % (epoch, learning_rate, sum_error))

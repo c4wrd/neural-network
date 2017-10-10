@@ -19,7 +19,7 @@ def tanh(value):
     return np.tanh(value)
 
 def tanh_deriv(value):
-    return 1 - tanh(value)**2
+    return 1 - value**2
 
 TRANSFER_FUNCTIONS = {
     "logistic": {

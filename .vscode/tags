@@ -1,0 +1,43 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+DERIVATIVE	../transfer.py	/^DERIVATIVE = "derivative"$/;"	kind:variable	line:4
+Datasets	../dataset.py	/^class Datasets:$/;"	kind:class	line:1
+FUNCTION	../transfer.py	/^FUNCTION = "function"$/;"	kind:variable	line:3
+Network	../learn.py	/^class Network:$/;"	kind:class	line:44
+Neuron	../learn.py	/^class Neuron:$/;"	kind:class	line:9
+TRANSFER_FUNCTIONS	../transfer.py	/^TRANSFER_FUNCTIONS = {$/;"	kind:variable	line:24
+__init__	../learn.py	/^    def __init__(self, num_inputs, num_layers = 1, $/;"	kind:member	line:49
+__init__	../learn.py	/^    def __init__(self, num_inputs, transfer_function = "logistic"):$/;"	kind:member	line:14
+__str__	../learn.py	/^    def __str__(self):$/;"	kind:member	line:37
+activate	../learn.py	/^    def activate(self, inputs):$/;"	kind:member	line:25
+backprop_error	../learn.py	/^    def backprop_error(self, expected_outputs):$/;"	kind:member	line:92
+backprop_hidden_layers	../learn.py	/^    def backprop_hidden_layers(self):$/;"	kind:member	line:79
+backprop_output_layer	../learn.py	/^    def backprop_output_layer(self, expected_outputs):$/;"	kind:member	line:72
+dataset.py	../dataset.py	1;"	kind:file	line:1
+delta	../learn.py	/^    delta = None$/;"	kind:variable	line:11
+forward	../learn.py	/^    def forward(self, inputs):$/;"	kind:member	line:22
+forward	../learn.py	/^    def forward(self, inputs):$/;"	kind:member	line:61
+input_layer	../learn.py	/^    input_layer = None$/;"	kind:variable	line:46
+layers	../learn.py	/^    layers = None$/;"	kind:variable	line:47
+learn.py	../learn.py	1;"	kind:file	line:1
+linear	../transfer.py	/^def linear(value):$/;"	kind:function	line:12
+linear_deriv	../transfer.py	/^def linear_deriv(value):$/;"	kind:function	line:15
+logistic	../learn.py	/^def logistic(value):$/;"	kind:function	line:6
+logistic	../transfer.py	/^def logistic(value):$/;"	kind:function	line:6
+logistic_deriv	../transfer.py	/^def logistic_deriv(value):$/;"	kind:function	line:9
+output	../learn.py	/^    output = None$/;"	kind:variable	line:12
+squares	../dataset.py	/^    def squares():$/;"	kind:member	line:13
+tanh	../transfer.py	/^def tanh(value):$/;"	kind:function	line:18
+tanh_deriv	../transfer.py	/^def tanh_deriv(value):$/;"	kind:function	line:21
+train	../learn.py	/^    def train(self, data, expected_outputs, learning_rate=0.01):$/;"	kind:member	line:109
+train_classifier	../learn.py	/^    def train_classifier(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):$/;"	kind:member	line:128
+train_regression	../learn.py	/^    def train_regression(self, dataset, learning_rate = 0.1, num_epochs = 100):$/;"	kind:member	line:115
+transfer	../learn.py	/^    def transfer(self, activation):$/;"	kind:member	line:28
+transfer.py	../transfer.py	1;"	kind:file	line:1
+transfer_derivative	../learn.py	/^    def transfer_derivative(self, value):$/;"	kind:member	line:31
+update_weights	../learn.py	/^    def update_weights(self, row, learning_rate):$/;"	kind:member	line:96
+xor	../dataset.py	/^    def xor():$/;"	kind:member	line:4
