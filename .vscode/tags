@@ -8,8 +8,10 @@ DERIVATIVE	../transfer.py	/^DERIVATIVE = "derivative"$/;"	kind:variable	line:4
 Datasets	../dataset.py	/^class Datasets:$/;"	kind:class	line:1
 FUNCTION	../transfer.py	/^FUNCTION = "function"$/;"	kind:variable	line:3
 Network	../learn.py	/^class Network:$/;"	kind:class	line:44
+NeuralNetworkTrainer	../learn.py	/^class NeuralNetworkTrainer:$/;"	kind:class	line:115
 Neuron	../learn.py	/^class Neuron:$/;"	kind:class	line:9
 TRANSFER_FUNCTIONS	../transfer.py	/^TRANSFER_FUNCTIONS = {$/;"	kind:variable	line:24
+__init__	../learn.py	/^    def __init__(self, network: Network):$/;"	kind:member	line:117
 __init__	../learn.py	/^    def __init__(self, num_inputs, num_layers = 1, $/;"	kind:member	line:49
 __init__	../learn.py	/^    def __init__(self, num_inputs, transfer_function = "logistic"):$/;"	kind:member	line:14
 __str__	../learn.py	/^    def __str__(self):$/;"	kind:member	line:37
@@ -34,8 +36,8 @@ squares	../dataset.py	/^    def squares():$/;"	kind:member	line:13
 tanh	../transfer.py	/^def tanh(value):$/;"	kind:function	line:18
 tanh_deriv	../transfer.py	/^def tanh_deriv(value):$/;"	kind:function	line:21
 train	../learn.py	/^    def train(self, data, expected_outputs, learning_rate=0.01):$/;"	kind:member	line:109
-train_classifier	../learn.py	/^    def train_classifier(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):$/;"	kind:member	line:128
-train_regression	../learn.py	/^    def train_regression(self, dataset, learning_rate = 0.1, num_epochs = 100):$/;"	kind:member	line:115
+train_classification	../learn.py	/^    def train_classification(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):$/;"	kind:member	line:133
+train_linear_regression	../learn.py	/^    def train_linear_regression(self, dataset, num_epochs=1000, learning_rate = 0.1):$/;"	kind:member	line:120
 transfer	../learn.py	/^    def transfer(self, activation):$/;"	kind:member	line:28
 transfer.py	../transfer.py	1;"	kind:file	line:1
 transfer_derivative	../learn.py	/^    def transfer_derivative(self, value):$/;"	kind:member	line:31

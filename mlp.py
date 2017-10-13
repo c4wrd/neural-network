@@ -1,75 +1,42 @@
+import json, random
 import numpy as np
-import random
 
-from transfer import TRANSFER_FUNCTIONS, FUNCTION, DERIVATIVE
+from neural_network import ArtificialNeuralNetwork, Neuron
+from transfer import DERIVATIVE, FUNCTION, TRANSFER_FUNCTIONS
 
-def logistic(value):
-    return 1 / (1 + np.exp(-value))
-
-class Neuron:
-
-    delta = None
-    output = None
-
-    def __init__(self, num_inputs, transfer_function = "logistic"):
-        self.weights = np.random.rand(num_inputs)
-        self.bias = random.random()
-        if not transfer_function in TRANSFER_FUNCTIONS:
-            raise "Invalid transfer function %s" % transfer_function
-        self.transfer_fx = TRANSFER_FUNCTIONS[transfer_function]
-        self.transfer_fx_name = transfer_function
-
-    def forward(self, inputs):
-        return self.transfer(self.activate(inputs))
-
-    def activate(self, inputs):
-        return np.dot(self.weights, inputs) + self.bias
-
-    def transfer(self, activation):
-        return self.transfer_fx[FUNCTION](activation)
-
-    def transfer_derivative(self, value):
-        """
-        Logistic function derivative
-        """
-        return self.transfer_fx[DERIVATIVE](value)
-
-    def __str__(self):
-        return str(dict(
-            weights = self.weights,
-            bias = self.bias,
-            transfer = self.transfer_fx_name
-        ))
-
-class Network:
+class MLFFNetwork(ArtificialNeuralNetwork):
 
     input_layer = None
     layers = None
 
-    def __init__(self, num_inputs, num_layers = 1, 
+    def __init__(self, num_inputs, num_hidden_layers = 1, 
                 num_nodes_layer = 3, num_outputs = 1,
                 hidden_transfer = "logistic", output_transfer = "logistic"):
-        self.num_layers = num_layers
-        self.num_nodes_layer = num_nodes_layer
+        """
+        Constructs an instance of a multi-layer feed forward
+        neural network. 
+
+        :param num_inputs The number of inputs for this network
+        :param num_hidden_layers (optional) The number of hidden layers in this network
+        :param num_nodes_layer (optional) The number of units per hidden layer
+        :param num_outputs (optional) The number of outputs this network produces
+        :param hidden_transfer (optional) The string name of the transfer function used
+            in the hidden layers
+        :param output_transfer (optional) The string name of the transfer function used
+            in the output layer
+        """
         # add our input layer
         self.input_layer = [Neuron(num_inputs) for i in range(num_nodes_layer)]
         # add our hidden layers
-        self.layers = [[Neuron(num_nodes_layer, hidden_transfer) for i in range(num_nodes_layer)]]
+        self.layers = [[Neuron(num_nodes_layer, hidden_transfer) for i in range(num_hidden_layers)]]
         # add our output layer
         self.layers.append([Neuron(num_nodes_layer, output_transfer) for i in range(num_outputs)])
 
-    def forward(self, inputs):
-        inputs = [node.forward(inputs) for node in self.input_layer]
-        for layer in self.layers:
-            new_inputs = []
-            for neuron in layer:
-                output = neuron.forward(inputs)
-                neuron.output = output
-                new_inputs.append(output)
-            inputs = new_inputs
-        return inputs
-
     def backprop_output_layer(self, expected_outputs):
+        """
+        A heper method to calculate the error delta for the neurons
+        in the output layer
+        """
         layer = self.layers[-1]
         for j in range(len(layer)):
             neuron = layer[j]
@@ -77,6 +44,10 @@ class Network:
             neuron.delta = error * neuron.transfer_derivative(neuron.output)
 
     def backprop_hidden_layers(self):
+        """
+        A helper function to backprop the error and calculate the 
+        deltas in each neuron in each layer of the hidden layers
+        """
         # for each neuron in our output layer
         for i in reversed(range(len(self.layers) - 1)):
             layer = self.layers[i]
@@ -90,10 +61,25 @@ class Network:
                 neuron.delta = error * neuron.transfer_derivative(neuron.output)
 
     def backprop_error(self, expected_outputs):
+        """
+        Backpropagates the error from the given expected outputs
+        through the network.
+
+        :param expected_outputs The target outputs of the network
+            for which error will be calculated for
+        """
         self.backprop_output_layer(expected_outputs)
         self.backprop_hidden_layers()
 
     def update_weights(self, row, learning_rate):
+        """
+        Updates the weights for all of the layers in the network.
+
+        :param row A particular data point for which the weights will
+            be adjusted for
+        :param learning_rate The learning rate to apply during weight update
+            calculations
+        """
         for i in range(len(self.layers)):
             layer = self.layers[i]
             inputs = row
@@ -107,14 +93,43 @@ class Network:
                 neuron.bias += learning_rate * neuron.delta
 
     def train(self, data, expected_outputs, learning_rate=0.01):
+        """
+        Trains the neural network on an expected data point.
+
+        :param data An array of feature values constituting one
+            data point in a data set
+        :param expected_outputs The expected outputs of the given
+            data row
+        :param learning_rate The learning rate for which weights
+            will be adjusted
+        """
         output = self.forward(data)
         self.backprop_error(expected_outputs)
         self.update_weights(data, learning_rate)
         return output
 
-class NeuralNetworkTrainer:
+class PretrainedMLPNetwork(MLFFNetwork):
 
-    def __init__(self, network: Network):
+    def __init__(self, network_json_str):
+        """
+        Constructs a MLPNetwork from a pre-trained network
+        output.
+
+        :param network_json_str The json string of the pre-trained network
+        """
+        network_json = json.loads(network_json_str)
+        inp_layer = network_json["input"]
+        output_layer = network_json["output"]
+        hidden_layers = network_json["hidden"]
+
+        # construct our layers from the 
+        self.input_layer = [Neuron(neuron_json=neuron) for neuron in inp_layer]
+        self.layers = [[Neuron(neuron_json=neuron) for neuron in layer] for layer in hidden_layers]
+        self.layers.append([Neuron(neuron_json=neuron) for neuron in output_layer])
+
+class MLPNetworkTrainer:
+
+    def __init__(self, network: MLFFNetwork):
         self.network = network
 
     def train_linear_regression(self, dataset, num_epochs=1000, learning_rate = 0.1):
