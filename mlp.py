@@ -25,16 +25,21 @@ class MLFFNetwork(ArtificialNeuralNetwork):
         :param output_transfer (optional) The string name of the transfer function used
             in the output layer
         """
-        # add our input layer
-        self.input_layer = [Neuron(num_inputs) for i in range(num_nodes_layer)]
-        # add our hidden layers
-        self.layers = [[Neuron(num_nodes_layer, hidden_transfer) for i in range(num_hidden_layers)]]
-        # add our output layer
-        self.layers.append([Neuron(num_nodes_layer, output_transfer) for i in range(num_outputs)])
+        self.layers = []
+        if num_hidden_layers > 0:
+            # the first hidden layer must num_inputs inputs, whereas
+            # all subsequent layers must have num_nodes_layer inputs
+            self.layers.append([Neuron(num_inputs) for i in range(num_nodes_layer)])
+            for i in range(num_hidden_layers - 1): # remaining layers
+                self.layers.append([Neuron(num_nodes_layer) for j in range(num_nodes_layer)])
+            # add our output layer
+            self.layers.append([Neuron(num_nodes_layer, output_transfer) for i in range(num_outputs)])
+        else:
+            self.layers.append([Neuron(num_inputs, output_transfer) for i in range(num_outputs)])
 
     def backprop_output_layer(self, expected_outputs):
         """
-        A heper method to calculate the error delta for the neurons
+        A helper method to calculate the error delta for the neurons
         in the output layer
         """
         layer = self.layers[-1]
@@ -118,12 +123,10 @@ class PretrainedMLPNetwork(MLFFNetwork):
         :param network_json_str The json string of the pre-trained network
         """
         network_json = json.loads(network_json_str)
-        inp_layer = network_json["input"]
         output_layer = network_json["output"]
         hidden_layers = network_json["hidden"]
 
         # construct our layers from the 
-        self.input_layer = [Neuron(neuron_json=neuron) for neuron in inp_layer]
         self.layers = [[Neuron(neuron_json=neuron) for neuron in layer] for layer in hidden_layers]
         self.layers.append([Neuron(neuron_json=neuron) for neuron in output_layer])
 

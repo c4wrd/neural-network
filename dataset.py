@@ -12,6 +12,6 @@ class Datasets:
     @staticmethod
     def squares():
         data = []
-        for i in range(10000):
+        for i in range(1000):
             data.append([i, i**2])
         return data

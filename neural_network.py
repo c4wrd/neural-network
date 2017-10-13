@@ -39,7 +39,7 @@ class Neuron:
 
     def json(self):
         return dict(
-            weights = self.weights,
+            weights = [float(weight) for weight in self.weights],
             bias = self.bias,
             transfer = self.transfer_fx_name
         )
@@ -53,7 +53,6 @@ class ArtificialNeuralNetwork:
         raise NotImplementedError("This is an abstract class and must be inherited!")
 
     def forward(self, inputs):
-        inputs = [node.forward(inputs) for node in self.input_layer]
         for layer in self.layers:
             new_inputs = []
             for neuron in layer:
@@ -65,8 +64,8 @@ class ArtificialNeuralNetwork:
 
     def json(self):
         json_network = {
-            "input": [neuron.json() for neuron in self.input_layer],
             "output": [neuron.json() for neuron in self.layers[-1]],
+            "hidden": []
         }
 
         if len(self.layers) > 1:
