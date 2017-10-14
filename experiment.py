@@ -2,6 +2,7 @@ from mlp import *
 from neural_network import *
 from dataset import Datasets
 from kfold import *
+from collections import deque
 import sys
 import csv
 
@@ -9,17 +10,17 @@ class CachedWriter:
     
     def __init__(self, writer):
         self.writer = writer
-        self.queue = []
+        self.queue = deque()
     
     def write_row(self, row):
         self.queue.append(row)
         if len(self.queue) == 100:
             while len(self.queue) > 0:
-                self.writer.writerow(self.queue.pop())
+                self.writer.writerow(self.queue.popleft())
 
     def flush(self):
         while len(self.queue) > 0:
-                self.writer.writerow(self.queue.pop())
+                self.writer.writerow(self.queue.popleft())
 
 num_epochs = int(sys.argv[1])
 dataset = Datasets.random_rosenbrock(2, points=1000)
