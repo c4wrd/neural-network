@@ -38,7 +38,7 @@ writer = CachedWriter(writer)
 def run():
     prev_err = None
     for [epoch, sum_error] in trainer.train_linear_regression(training_set, num_epochs):
-        writer.write_row([str(epoch), str(sum_error)])
+        writer.write_row([str(epoch), "%.3f" % sum_error])
         if epoch % 10 == 0:
             if prev_err is None:
                 prev_err = sum_error
