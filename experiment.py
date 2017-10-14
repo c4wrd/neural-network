@@ -16,6 +16,7 @@ class CachedWriter:
         self.queue.append(row)
         if len(self.queue) == 100:
             while len(self.queue) > 0:
+                print(self.queue[0])
                 self.writer.writerow(self.queue.popleft())
 
     def flush(self):
@@ -32,7 +33,7 @@ validation_set = k.get_validation_set(0)
 
 results_file = open("results.csv", "w+")
 writer = csv.writer(results_file)
-writer.writerow(["epoch", "mse", "validation_mse"])
+writer.writerow(["epoch", "mse"])
 writer = CachedWriter(writer)
 
 def run():
@@ -52,3 +53,4 @@ try:
     run()
 except:
     writer.flush()
+writer.flush()
