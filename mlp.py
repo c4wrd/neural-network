@@ -72,6 +72,8 @@ class MLPNetworkTrainer:
         """
         Train for function approximation (one linear output)
         """
+        if num_epochs == -1:
+            num_epochs = 1000000000000
         for epoch in range(start_epoch, start_epoch + num_epochs):
             sum_error = 0
             for row in dataset:
