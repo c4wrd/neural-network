@@ -15,12 +15,11 @@ class CachedWriter:
     def write_row(self, row):
         self.queue.append(row)
         if len(self.queue) == 100:
-            while len(self.queue) > 0:
-                print(self.queue[0])
+            while self.queue:
                 self.writer.writerow(self.queue.popleft())
 
     def flush(self):
-        while len(self.queue) > 0:
+        while self.queue:
                 self.writer.writerow(self.queue.popleft())
 
 num_epochs = int(sys.argv[1])
