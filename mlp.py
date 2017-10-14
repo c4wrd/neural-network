@@ -37,66 +37,6 @@ class MLFFNetwork(ArtificialNeuralNetwork):
         else:
             self.layers.append([Neuron(num_inputs, output_transfer) for i in range(num_outputs)])
 
-    def backprop_output_layer(self, expected_outputs):
-        """
-        A helper method to calculate the error delta for the neurons
-        in the output layer
-        """
-        layer = self.layers[-1]
-        for j in range(len(layer)):
-            neuron = layer[j]
-            error = expected_outputs[j] - neuron.output
-            neuron.delta = error * neuron.transfer_derivative(neuron.output)
-
-    def backprop_hidden_layers(self):
-        """
-        A helper function to backprop the error and calculate the 
-        deltas in each neuron in each layer of the hidden layers
-        """
-        # for each neuron in our output layer
-        for i in reversed(range(len(self.layers) - 1)):
-            layer = self.layers[i]
-            errors = []
-            for j in range(len(layer)):
-                error = 0.0
-                neuron = layer[j]
-                ds_layer = self.layers[i + 1]
-                for ds_neuron in ds_layer:
-                    error += ds_neuron.weights[j] * ds_neuron.delta
-                neuron.delta = error * neuron.transfer_derivative(neuron.output)
-
-    def backprop_error(self, expected_outputs):
-        """
-        Backpropagates the error from the given expected outputs
-        through the network.
-
-        :param expected_outputs The target outputs of the network
-            for which error will be calculated for
-        """
-        self.backprop_output_layer(expected_outputs)
-        self.backprop_hidden_layers()
-
-    def update_weights(self, row, learning_rate):
-        """
-        Updates the weights for all of the layers in the network.
-
-        :param row A particular data point for which the weights will
-            be adjusted for
-        :param learning_rate The learning rate to apply during weight update
-            calculations
-        """
-        for i in range(len(self.layers)):
-            layer = self.layers[i]
-            inputs = row
-            if i != 0:
-                prev_layer = self.layers[i-1]
-                inputs = [neuron.output for neuron in prev_layer]
-            for neuron in layer:
-                for j in range(len(inputs)):
-                    # update the jth weight for the jth input
-                    neuron.weights[j] += learning_rate * neuron.delta * inputs[j]
-                neuron.bias += learning_rate * neuron.delta
-
     def train(self, data, expected_outputs, learning_rate=0.01):
         """
         Trains the neural network on an expected data point.
@@ -146,7 +86,8 @@ class MLPNetworkTrainer:
                 expected = row[-1]
                 output = self.network.train(inputs, [expected], learning_rate)[0]
                 sum_error += (expected - output)**2
-            print(">epoch=%d, lrate=%.3f, error=%.3f" % (epoch, learning_rate, sum_error))
+            yield [epoch, sum_error]
+            # print(">epoch=%d, lrate=%.3f, error=%.3f" % (epoch, learning_rate, sum_error))
 
     def train_classification(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):
         """
@@ -167,4 +108,5 @@ class MLPNetworkTrainer:
                 expected[expected_class] = 1
                 output = self.network.train(features, expected, learning_rate)
                 sum_error = sum([(expected[i] - output[i])**2 for i in range(num_classes)])
-            print('>epoch=%d, lrate=%.3f, sum_error=%.3f' % (epoch, learning_rate, sum_error))
+                yield dict(epoch=epoch, error=sum_error)
+            # print('>epoch=%d, lrate=%.3f, sum_error=%.3f' % (epoch, learning_rate, sum_error))
