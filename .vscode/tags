@@ -4,34 +4,42 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-ArtificialNeuralNetwork	../neural_network.py	/^class ArtificialNeuralNetwork:$/;"	kind:class	line:47
+ArtificialNeuralNetwork	../neural_network.py	/^class ArtificialNeuralNetwork:$/;"	kind:class	line:53
 DERIVATIVE	../transfer.py	/^DERIVATIVE = "derivative"$/;"	kind:variable	line:4
 Datasets	../dataset.py	/^class Datasets:$/;"	kind:class	line:4
 FUNCTION	../transfer.py	/^FUNCTION = "function"$/;"	kind:variable	line:3
+KFoldCrossValidation	../kfold.py	/^class KFoldCrossValidation:$/;"	kind:class	line:3
 MLFFNetwork	../mlp.py	/^class MLFFNetwork(ArtificialNeuralNetwork):$/;"	kind:class	line:7
-MLPNetworkTrainer	../mlp.py	/^class MLPNetworkTrainer:$/;"	kind:class	line:73
-Neuron	../neural_network.py	/^class Neuron:$/;"	kind:class	line:6
-PretrainedMLPNetwork	../mlp.py	/^class PretrainedMLPNetwork(MLFFNetwork):$/;"	kind:class	line:56
+MLPNetworkTrainer	../mlp.py	/^class MLPNetworkTrainer:$/;"	kind:class	line:57
+Neuron	../neural_network.py	/^class Neuron:$/;"	kind:class	line:12
+PretrainedMLPNetwork	../mlp.py	/^class PretrainedMLPNetwork(MLFFNetwork):$/;"	kind:class	line:40
 TRANSFER_FUNCTIONS	../transfer.py	/^TRANSFER_FUNCTIONS = {$/;"	kind:variable	line:24
-__init__	../mlp.py	/^    def __init__(self, network: MLFFNetwork):$/;"	kind:member	line:75
-__init__	../mlp.py	/^    def __init__(self, network_json_str):$/;"	kind:member	line:58
+__init__	../kfold.py	/^    def __init__(self, dataset, num_folds):$/;"	kind:member	line:5
+__init__	../mlp.py	/^    def __init__(self, network: MLFFNetwork):$/;"	kind:member	line:59
+__init__	../mlp.py	/^    def __init__(self, network_json_str):$/;"	kind:member	line:42
 __init__	../mlp.py	/^    def __init__(self, num_inputs, num_hidden_layers = 1, $/;"	kind:member	line:12
-__init__	../neural_network.py	/^    def __init__(self):$/;"	kind:member	line:52
-__init__	../neural_network.py	/^    def __init__(self, num_inputs = None, transfer_function = "logistic",$/;"	kind:member	line:11
-activate	../neural_network.py	/^    def activate(self, inputs):$/;"	kind:member	line:28
-backprop_error	../neural_network.py	/^    def backprop_error(self, expected_outputs):$/;"	kind:member	line:93
-backprop_hidden_layers	../neural_network.py	/^    def backprop_hidden_layers(self):$/;"	kind:member	line:76
-backprop_output_layer	../neural_network.py	/^    def backprop_output_layer(self, expected_outputs):$/;"	kind:member	line:65
+__init__	../neural_network.py	/^    def __init__(self):$/;"	kind:member	line:58
+__init__	../neural_network.py	/^    def __init__(self, num_inputs = None, transfer_function = "logistic",$/;"	kind:member	line:17
+activate	../neural_network.py	/^    def activate(self, inputs):$/;"	kind:member	line:34
+backprop_error	../neural_network.py	/^    def backprop_error(self, expected_outputs):$/;"	kind:member	line:98
+backprop_hidden_layers	../neural_network.py	/^    def backprop_hidden_layers(self):$/;"	kind:member	line:82
+backprop_output_layer	../neural_network.py	/^    def backprop_output_layer(self, expected_outputs):$/;"	kind:member	line:71
 dataset.py	../dataset.py	1;"	kind:file	line:1
-delta	../neural_network.py	/^    delta = None$/;"	kind:variable	line:8
-forward	../neural_network.py	/^    def forward(self, inputs):$/;"	kind:member	line:25
-forward	../neural_network.py	/^    def forward(self, inputs):$/;"	kind:member	line:55
+delta	../neural_network.py	/^    delta = None$/;"	kind:variable	line:14
+forward	../neural_network.py	/^    def forward(self, inputs):$/;"	kind:member	line:31
+forward	../neural_network.py	/^    def forward(self, inputs):$/;"	kind:member	line:61
+get_average_delta	../neural_network.py	/^def get_average_delta(deltas):$/;"	kind:function	line:9
+get_average_delta_weight	../neural_network.py	/^def get_average_delta_weight(deltas):$/;"	kind:function	line:6
+get_delta_weights	../neural_network.py	/^    def get_delta_weights(self, row, learning_rate):$/;"	kind:member	line:112
+get_training_set	../kfold.py	/^    def get_training_set(self, fold_index):$/;"	kind:member	line:11
+get_validation_set	../kfold.py	/^    def get_validation_set(self, fold_index):$/;"	kind:member	line:19
 input_layer	../mlp.py	/^    input_layer = None$/;"	kind:variable	line:9
-input_layer	../neural_network.py	/^    input_layer = None$/;"	kind:variable	line:49
-json	../neural_network.py	/^    def json(self):$/;"	kind:member	line:125
-json	../neural_network.py	/^    def json(self):$/;"	kind:member	line:40
+input_layer	../neural_network.py	/^    input_layer = None$/;"	kind:variable	line:55
+json	../neural_network.py	/^    def json(self):$/;"	kind:member	line:210
+json	../neural_network.py	/^    def json(self):$/;"	kind:member	line:46
+kfold.py	../kfold.py	1;"	kind:file	line:1
 layers	../mlp.py	/^    layers = None$/;"	kind:variable	line:10
-layers	../neural_network.py	/^    layers = None$/;"	kind:variable	line:50
+layers	../neural_network.py	/^    layers = None$/;"	kind:variable	line:56
 linear	../dataset.py	/^    def linear():$/;"	kind:member	line:24
 linear	../transfer.py	/^def linear(value):$/;"	kind:function	line:12
 linear_deriv	../transfer.py	/^def linear_deriv(value):$/;"	kind:function	line:15
@@ -39,18 +47,21 @@ logistic	../transfer.py	/^def logistic(value):$/;"	kind:function	line:6
 logistic_deriv	../transfer.py	/^def logistic_deriv(value):$/;"	kind:function	line:9
 mlp.py	../mlp.py	1;"	kind:file	line:1
 neural_network.py	../neural_network.py	1;"	kind:file	line:1
-output	../neural_network.py	/^    output = None$/;"	kind:variable	line:9
+output	../neural_network.py	/^    output = None$/;"	kind:variable	line:15
 random_rosenbrock	../dataset.py	/^    def random_rosenbrock(numx = 2, points = 100, lower_bound = -3, upper_bound = 3):$/;"	kind:member	line:32
 rosenbrock	../rosenbrock.py	/^def rosenbrock(*args):$/;"	kind:function	line:1
 rosenbrock.py	../rosenbrock.py	1;"	kind:file	line:1
 squares	../dataset.py	/^    def squares():$/;"	kind:member	line:16
 tanh	../transfer.py	/^def tanh(value):$/;"	kind:function	line:18
 tanh_deriv	../transfer.py	/^def tanh_deriv(value):$/;"	kind:function	line:21
-train	../mlp.py	/^    def train(self, data, expected_outputs, learning_rate=0.01):$/;"	kind:member	line:40
-train_classification	../mlp.py	/^    def train_classification(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):$/;"	kind:member	line:92
-train_linear_regression	../mlp.py	/^    def train_linear_regression(self, dataset, num_epochs=1000, learning_rate = 0.1):$/;"	kind:member	line:78
-transfer	../neural_network.py	/^    def transfer(self, activation):$/;"	kind:member	line:31
+train	../neural_network.py	/^    def train(self, data, expected_outputs, learning_rate=0.1):$/;"	kind:member	line:177
+train_batch	../neural_network.py	/^    def train_batch(self, data, expected_outputs, learning_rate = 0.1):$/;"	kind:member	line:193
+train_classification	../mlp.py	/^    def train_classification(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):$/;"	kind:member	line:84
+train_linear_regression	../mlp.py	/^    def train_linear_regression(self, dataset, num_epochs=1000, learning_rate = 0.1):$/;"	kind:member	line:62
+train_linear_regression_batch	../mlp.py	/^    def train_linear_regression_batch(self, dataset, max_epochs=1000, learning_rate=0.1):$/;"	kind:member	line:76
+transfer	../neural_network.py	/^    def transfer(self, activation):$/;"	kind:member	line:37
 transfer.py	../transfer.py	1;"	kind:file	line:1
-transfer_derivative	../neural_network.py	/^    def transfer_derivative(self, value):$/;"	kind:member	line:34
-update_weights	../neural_network.py	/^    def update_weights(self, row, learning_rate):$/;"	kind:member	line:104
+transfer_derivative	../neural_network.py	/^    def transfer_derivative(self, value):$/;"	kind:member	line:40
+update_weights	../neural_network.py	/^    def update_weights(self, row, learning_rate):$/;"	kind:member	line:155
+update_weights_with_deltas	../neural_network.py	/^    def update_weights_with_deltas(self, delta_err, delta_weights, learning_rate):$/;"	kind:member	line:139
 xor	../dataset.py	/^    def xor():$/;"	kind:member	line:7

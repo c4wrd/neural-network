@@ -37,22 +37,6 @@ class MLFFNetwork(ArtificialNeuralNetwork):
         else:
             self.layers.append([Neuron(num_inputs, output_transfer) for i in range(num_outputs)])
 
-    def train(self, data, expected_outputs, learning_rate=0.01):
-        """
-        Trains the neural network on an expected data point.
-
-        :param data An array of feature values constituting one
-            data point in a data set
-        :param expected_outputs The expected outputs of the given
-            data row
-        :param learning_rate The learning rate for which weights
-            will be adjusted
-        """
-        output = self.forward(data)
-        self.backprop_error(expected_outputs)
-        self.update_weights(data, learning_rate)
-        return output
-
 class PretrainedMLPNetwork(MLFFNetwork):
 
     def __init__(self, network_json_str):
@@ -75,19 +59,36 @@ class MLPNetworkTrainer:
     def __init__(self, network: MLFFNetwork):
         self.network = network
 
-    def train_linear_regression(self, dataset, num_epochs=1000, learning_rate = 0.1):
+    def mean_squared_error(self, dataset):
+        sum_error = 0
+        for row in dataset:
+            inputs = row[:-1]
+            expected = row[-1:]
+            output = self.network.forward(inputs)
+            sum_error += (expected[0] - output[0])**2
+        return sum_error / 2
+
+    def train_linear_regression(self, dataset, num_epochs=1000, start_epoch=0, learning_rate = 0.1):
         """
         Train for function approximation (one linear output)
         """
-        for epoch in range(num_epochs):
+        for epoch in range(start_epoch, start_epoch + num_epochs):
             sum_error = 0
             for row in dataset:
                 inputs = row[:-1]
-                expected = row[-1]
-                output = self.network.train(inputs, [expected], learning_rate)[0]
+                expected = row[-1:]
+                output = self.network.train(inputs, expected, learning_rate)[0]
                 sum_error += (expected - output)**2
-            yield [epoch, sum_error]
+            yield [epoch, sum_error/2]
             # print(">epoch=%d, lrate=%.3f, error=%.3f" % (epoch, learning_rate, sum_error))
+
+    def train_linear_regression_batch(self, dataset, max_epochs=1000, learning_rate=0.1):
+        for epoch in range(max_epochs):
+            sum_error = 0
+            delta_weights = []
+            for row in dataset:
+                inputs = row[:-1]
+                expected = row[-1]
 
     def train_classification(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):
         """
