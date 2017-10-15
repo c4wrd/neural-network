@@ -100,7 +100,8 @@ Starting experiment.
             # all duplicates, i.e. the error hasn't
             # changed
             if len(set(err_queue)) == 1:
-                print("== Error hasn't changed for %d epochs, stopping training ==")
+                print("== Error hasn't changed for %d epochs, stopping training ==" % self.epoch_patience)
+                return True
         else:
             return False
 
