@@ -71,7 +71,20 @@ class ArtificialNeuralNetwork:
             inputs = outputs # set the inputs to the outputs of the layer
         return inputs
 
+    def train(self, *args):
+        raise NotImplementedError()
+
+    def train_without_update(self, *args):
+        raise NotImplementedError()
+
+    def apply_weight_gradients(self, *args):
+        raise NotImplementedError()
+
     def json(self):
+        """
+        Serializes the model into a JSON formatted object
+        :return:
+        """
         json_network = {
             "output": [neuron.json() for neuron in self.layers[-1]],
             "hidden": []

@@ -11,15 +11,16 @@ class QueuedCsvWriter:
     that will write lines in blocks for performance
     reasons.
     """
-    def __init__(self, result_file_name, header_row):
+    def __init__(self, result_file_name, header_row, queue_size = 50):
         self.file = open(result_file_name, "w+")
         self.writer = csv.writer(self.file)
         self.writer.writerow(header_row)
         self.queue = deque()
+        self.queue_size = queue_size
 
     def writerow(self, row):
         self.queue.append(row)
-        if len(self.queue) == 50:
+        if len(self.queue) >= self.queue_size:
             while self.queue:
                 self.writer.writerow(self.queue.popleft())
 

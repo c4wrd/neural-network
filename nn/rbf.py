@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 
 import util
@@ -131,12 +133,27 @@ class RBFNetwork(ArtificialNeuralNetwork):
         dweights = self.calculate_weight_gradients()
         return [outputs, dweights]
 
+class PretrainedRBFNetwork(RBFNetwork):
+
+    def __init__(self, network_json_str):
+        network_json = json.loads(network_json_str)
+        output_layer = network_json["output"]
+        hidden_layers = network_json["hidden"]
+
+        # construct our layers from the
+        self.layers = [[RBFNeuron(neuron_json=neuron) for neuron in layer] for layer in hidden_layers]
+        self.layers.append([RBFNeuron(neuron_json=neuron) for neuron in output_layer])
+
 class RBFTrainer:
 
-    def __init__(self, network: RBFNetwork):
+    def __init__(self, network: RBFNetwork, training_set, validation_set, learning_rate=0.1):
+        network.set_learning_rate(learning_rate)
         self.network = network
+        self.training_set = training_set
+        self.validation_set = validation_set
+        self.should_train = True
 
-    def train_regression_stochastic(self, dataset, learning_rate=0.1, num_epochs=100, start_epoch=0):
+    def train_regression_incremental(self, dataset, learning_rate=0.1, num_epochs=100, start_epoch=0):
         self.network.set_learning_rate(learning_rate)
         if num_epochs == -1:
             num_epochs = 1000000000000
@@ -149,7 +166,7 @@ class RBFTrainer:
                 sum_error += (expected - output)**2
             yield [epoch, sum_error/2]
 
-    def train_regression_batch(self, dataset, batch_size=None, learning_rate=0.1, num_epochs=100, start_epoch=0):
+    def train_regression_batch(self, batch_size=None, learning_rate=0.1, num_epochs=100, start_epoch=0):
         """
         Performs batch learning on the dataset and the given network. Mini-batch can be performed by setting
         the batch size.
@@ -162,16 +179,18 @@ class RBFTrainer:
         :return: A generator that yields the epoch and mean squared error of
             all of the training points in dataset during the epoch
         """
+        self.network.set_learning_rate(learning_rate)
+
         batches = None
         if batch_size is None:
-            batches = [dataset]
+            batches = [self.training_set]
         else:
-            batches = util.chunk_array(dataset, batch_size)
+            batches = util.chunk_array(self.training_set, batch_size)
 
-        self.network.set_learning_rate(learning_rate)
         if num_epochs == -1:
             num_epochs = 1000000000000
-        for epoch in range(start_epoch, start_epoch+num_epochs):
+
+        for epoch in range(start_epoch, start_epoch + num_epochs):
             sum_error = 0
             for batch in batches:
                 batch_dweights = []  # array of weight changes for data points in this batch
@@ -179,28 +198,12 @@ class RBFTrainer:
                     inputs = row[:-1]
                     expected = row[-1:]
                     [output, dweights] = self.network.train_without_update(inputs, expected) # calculate the outputs
-                    sum_error += (expected - output) ** 2
+                    sum_error += (expected[0] - output[0]) ** 2
                     self.network.backprop_error(expected)
                     batch_dweights.append(dweights)
                 mean_dweights = np.mean(batch_dweights, axis=0) # calculate the mean weight change for each weight
                 self.network.apply_weight_gradients(mean_dweights)
-            yield [epoch, sum_error / 2]
 
-    def train_regression_mini_batch(self, dataset, batch_size, learning_rate=0.1, num_epochs=100, start_epoch=0):
-
-        self.network.set_learning_rate(learning_rate)
-        if num_epochs == -1:
-            num_epochs = 1000000000000
-        for epoch in range(start_epoch, start_epoch+num_epochs):
-            sum_error = 0
-            total_dweights = [] # array of all of the weight changes for each data point
-            for row in dataset:
-                inputs = row[:-1]
-                expected = row[-1:]
-                [output, dweights] = self.network.train_without_update(inputs, expected) # calculate the outputs
-                sum_error += (expected - output) ** 2
-                self.network.backprop_error(expected)
-                total_dweights.append(dweights)
-            mean_dweights = np.mean(total_dweights, axis=0) # calculate the mean weight change for each weight
-            self.network.apply_weight_gradients(mean_dweights)
-            yield [epoch, sum_error]
+            mse_training = sum_error / 2
+            mse_validation = util.mean_squared_error(self.validation_set, self.network)
+            yield [epoch, mse_training, mse_validation]

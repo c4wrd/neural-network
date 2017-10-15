@@ -5,32 +5,6 @@ import numpy as np
 from dataset import Datasets
 from nn.neural_network import ArtificialNeuralNetwork, Neuron
 
-def get_mean_gradients(dweights):
-    """
-    Calculates the mean weight gradient for a supplied
-    list of weight gradients acquired over multiple training
-    updates. Because the weight gradient is of multiple dimensions,
-    we must iterate over each layer, neuron and weight individually to
-    calculate the average.
-    :param dweights: An array of gradient weight matrices
-    :returns The average weight gradients
-    """
-    summed_dweights = dweights.pop()
-    num_dweights = len(dweights)
-
-    # accumulate
-    for layer_index in range(num_dweights):
-        layer_dweights = summed_dweights[layer_index]
-        for neuron_index in range(len(layer_dweights)):
-            neuron_dweights = layer_dweights[neuron_index]
-            for dweight_index in range(len(neuron_dweights)):
-                summed_dweights[layer_index][neuron_index][dweight_index] += num_dweights + 1
-
-    return summed_dweights
-    # mean
-
-    return summed_dweights
-
 class MLFFNetwork(ArtificialNeuralNetwork):
 
     input_layer = None
@@ -208,76 +182,3 @@ class PretrainedMLPNetwork(MLFFNetwork):
         # construct our layers from the 
         self.layers = [[Neuron(neuron_json=neuron) for neuron in layer] for layer in hidden_layers]
         self.layers.append([Neuron(neuron_json=neuron) for neuron in output_layer])
-
-class MLFFNetworkTrainer:
-
-    def __init__(self, network: MLFFNetwork):
-        self.network = network
-
-    def train_regression_stochastic(self, dataset, num_epochs=1000, start_epoch=0, learning_rate = 0.1):
-        """
-        Trains the network on regression, yielding the epoch and sum_error for each epoch
-        """
-        self.network.set_learning_rate(learning_rate)
-        if num_epochs == -1:
-            num_epochs = 1000000000000
-        for epoch in range(start_epoch, start_epoch + num_epochs):
-            sum_error = 0
-            for row in dataset:
-                inputs = row[:-1]
-                expected = row[-1:]
-                output = self.network.train(inputs, expected)[0]
-                sum_error += (expected - output)**2
-            yield [epoch, sum_error/2]
-
-    def train_regression_batch(self, dataset, learning_rate=0.1, num_epochs=1000, start_epoch=0, batch_size=None):
-        batches = None
-        if batch_size is None:
-            batches = [dataset]
-        else:
-            batches = util.chunk_array(dataset, batch_size)
-
-        self.network.set_learning_rate(learning_rate)
-        if num_epochs == -1:
-            num_epochs = 1000000000000
-        for epoch in range(start_epoch, start_epoch + num_epochs):
-            sum_error = 0
-            for batch in batches:
-                batch_dweights = []  # array of weight changes for data points in this batch
-                for row in batch:
-                    inputs = row[:-1]
-                    expected = row[-1:]
-                    [output, dweights] = self.network.train_without_update(inputs, expected)  # calculate the outputs
-                    sum_error += (expected - output) ** 2
-                    self.network.backprop_error(expected)
-                    batch_dweights.append(dweights)
-                mean_dweights = get_mean_gradients(batch_dweights)
-                self.network.apply_weight_gradients(mean_dweights)
-            yield [epoch, sum_error / 2]
-
-    def train_classification(self, dataset, num_classes, learning_rate = 0.01, num_epochs = 1000):
-        """
-        Trains the network on the dataset, given the dataset is in the format
-        [
-            [x1, x2, ..., xn, C],
-            ...
-        ]
-        Where x1..xn are features and C is a class label (0 indexed), where num_classes is the
-        total number of classes.
-        """
-        for epoch in range(num_epochs):
-            sum_error = 0
-            for row in dataset:
-                features = row[:-1]
-                expected = [0 for i in range(num_classes)]
-                expected_class = row[-1]
-                expected[expected_class] = 1
-                output = self.network.train(features, expected)
-                sum_error = sum([(expected[i] - output[i])**2 for i in range(num_classes)])
-                yield dict(epoch=epoch, error=sum_error)
-            # print('>epoch=%d, lrate=%.3f, sum_error=%.3f' % (epoch, learning_rate, sum_error))
-
-dataset = Datasets.linear()
-network = MLFFNetwork(1, 1, 50, 1, output_transfer="linear")
-trainer = MLFFNetworkTrainer(network)
-
