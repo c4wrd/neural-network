@@ -1,4 +1,5 @@
 import json
+import numpy as np
 
 from collections import deque
 from nn.neural_network import ArtificialNeuralNetwork
@@ -19,7 +20,7 @@ class Experiment:
                  results_file_name,
                  models_file_name,
                  learning_rate=0.1,
-                 epoch_patience=50):
+                 epoch_patience=100):
         """
 
         :param network: The neural network to perform the experiment
@@ -41,16 +42,17 @@ class Experiment:
         self.mse_validation_queue = deque(maxlen=epoch_patience)
         self.mse_train_queue = deque(maxlen=epoch_patience)
         self.epoch_patience = epoch_patience
+        self.epoch = 0
         print(
-            """
-            =====
-            Starting experiment.
-                learning_rate : {learning_rate}
-                |D|           : {size}
-                epoch_patience: {patience}
-                results_file  : {results}
-                models_file   : {models}
-            =====
+            """\
+=====
+Starting experiment.
+    learning_rate : {learning_rate}
+    |D|           : {size}
+    epoch_patience: {patience}
+    results_file  : {results}
+    models_file   : {models}
+=====
             """.format(learning_rate=learning_rate, size=len(dataset),
                        patience=epoch_patience, results=results_file_name,
                        models=models_file_name)
@@ -59,6 +61,8 @@ class Experiment:
 
     def run(self):
         for [epoch, mse_train, mse_validation] in self.trainer.train_regression_batch():
+            print("epoch=%d, mse_train=%f, mse_validation=%f" % (epoch, mse_train, mse_validation))
+            self.epoch = epoch
             self.mse_train_queue.append(mse_train)
             self.mse_validation_queue.append(mse_validation)
 
@@ -84,7 +88,8 @@ class Experiment:
         # to stop the training process
         conditions = [
             self.err_not_changing(self.mse_validation_queue),
-            self.err_not_changing(self.mse_train_queue)
+            self.err_not_changing(self.mse_train_queue),
+            self.average_validation_err_increasing()
         ]
         return any(conditions)
 
@@ -99,14 +104,25 @@ class Experiment:
         else:
             return False
 
-    def average_err_diff_less_than_threshold(self, mse_validation_queue):
+    def average_validation_err_increasing(self):
         """
-        Determines if the average change in the last :patience: epochs
-        is less than the specified
-        :param mse_validation_queue:
-        :return:
+        Determines if the average validation error is increasing
+        on average for the last :patience: epochs, suggesting
+        we are starting to overfit the model. We only determine
+        this is a potential issue if we have elapsed at least
+        1000 epochs, suggesting the model is still extremely
+        volatile and will not converge.
         """
-        pass
+        if self.epoch > 100: # we must run at least 1000 epochs before we check this
+            sum_diff = 0
+            for i in reversed(range(1, len(self.mse_validation_queue))):
+                diff = self.mse_validation_queue[i] - self.mse_validation_queue[i-1]
+                sum_diff += 1 if diff > 0 else -1
+            if sum_diff > 0:
+                print("== The average validation error has a positive increase on average in the last %d epochs, stopping training ==" % self.epoch_patience)
+                return True
+            else:
+                return False
 
     def exit_handler(self):
         """

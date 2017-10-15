@@ -1,22 +1,33 @@
+import argparse
+import signal
 import sys
-
 from dataset import Datasets
+
 from nn.rbf import *
-from nn.trainer import NetworkTrainer
-from util import KFoldCrossValidation, QueuedCsvWriter
+from experiment import *
 
-num_epochs = int(sys.argv[1])
-dataset = Datasets.random_rosenbrock(2, 1000, -1.5, 1.5)
-network = RBFNetwork(2, -1.5, 1.5, 50, 0.5)
-trainer = NetworkTrainer(network, dataset[:400], dataset[400:])
-writer = QueuedCsvWriter("results.csv", ["epoch", "mse_valid", "mse_train"])
+parser = argparse.ArgumentParser()
+parser.add_argument("num_inputs", help="The number of inputs for the Rosenbrock function to use", type=int)
+parser.add_argument("num_points", help="The number of Rosenbrock data points to generate", type=int)
+parser.add_argument("num_gaussian", help="The number of hidden Gaussian functions to use", type=int)
+parser.add_argument("results", help="The results file to save to")
+parser.add_argument("models", help="The models file to save to")
 
-def run():
-    for [epoch, mse_training, mse_validation] in trainer.train_regression_batch():
-        print("epoch %d, mse_train=%.3f, mse_validation=%.3f" % (epoch, mse_training, mse_validation))
-        #writer.writerow([str(epoch), "%f" % mse_training, "%f" % mse_validation])
-            # if epoch % 10 == 0:
-            #     mse = trainer.mean_squared_error(validation_set)
-            #     print("epoch %d, validation_mse=%.3f, sum_error=%.3f" % (epoch, mse, sum_error))
+if __name__ == "__main__":
+    args = parser.parse_args()
 
-run()
+    dataset = Datasets.random_rosenbrock(args.num_inputs, args.num_points)
+    network = RBFNetwork(args.num_inputs, num_hidden_units=args.num_gaussian)
+    experiment = Experiment(network, dataset, args.results, args.models)
+
+    def on_exit(*args):
+        print("=== Exit signal received, stopping training prematurely ===")
+        experiment.exit_handler()
+        sys.exit(0)
+
+    signal.signal(signal.SIGTERM, on_exit)
+
+    try:
+        experiment.run()
+    except:
+        experiment.exit_handler()

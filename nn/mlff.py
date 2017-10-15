@@ -12,7 +12,7 @@ class MLFFNetwork(ArtificialNeuralNetwork):
 
     def __init__(self, num_inputs, num_hidden_layers = 1, 
                 num_nodes_layer = 3, num_outputs = 1,
-                hidden_transfer = "logistic", output_transfer = "logistic"):
+                hidden_transfer = "logistic", output_transfer = "linear"):
         """
         Constructs an instance of a multi-layer feed forward
         neural network. 

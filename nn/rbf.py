@@ -45,14 +45,14 @@ class RBFNeuron(Neuron):
 
     def json(self):
         return dict(
-            center=self.center,
-            variance=self.variance   
+            center=[float(val) for val in self.center],
+            variance=self.variance
         )
 
 class RBFNetwork(ArtificialNeuralNetwork):
 
-    def __init__(self, num_inputs, i_lower_bound, i_upper_bound, num_hidden_units = 10,
-                 variance=0.1, output_transfer="linear", learning_rate = 0.1):
+    def __init__(self, num_inputs, i_lower_bound=-1.5, i_upper_bound=1.5, num_hidden_units = 10,
+                 variance=0.5, learning_rate = 0.1):
         self.layers = []
         hidden_layer = [RBFNeuron(num_inputs, i_lower_bound, i_upper_bound, variance) for i in range(num_hidden_units)]
         output_layer = [Neuron(num_hidden_units, transfer_function="linear")]
@@ -142,7 +142,7 @@ class PretrainedRBFNetwork(RBFNetwork):
 
         # construct our layers from the
         self.layers = [[RBFNeuron(neuron_json=neuron) for neuron in layer] for layer in hidden_layers]
-        self.layers.append([RBFNeuron(neuron_json=neuron) for neuron in output_layer])
+        self.layers.append([Neuron(neuron_json=neuron) for neuron in output_layer])
 
 class RBFTrainer:
 

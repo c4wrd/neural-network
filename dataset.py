@@ -42,7 +42,7 @@ class Datasets:
         return data
             
     @staticmethod
-    def random_rosenbrock(numx = 2, points = 100, lower_bound = -3, upper_bound = 3,
+    def random_rosenbrock(numx = 2, points = 100, lower_bound = -2, upper_bound = 2,
         num_decimals=2):
         """
         Computes a random dataset of points size in the range
