@@ -88,9 +88,8 @@ Starting experiment.
         # to stop the training process
         conditions = [
             self.err_not_changing(self.mse_validation_queue),
-            self.err_not_changing(self.mse_train_queue),
-            self.average_validation_err_increasing()
-        ]
+            self.err_not_changing(self.mse_train_queue)
+        ]   #  self.average_validation_err_increasing()
         return any(conditions)
 
     def err_not_changing(self, err_queue: deque):

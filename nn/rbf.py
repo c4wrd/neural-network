@@ -1,21 +1,41 @@
+import itertools
 import json
-
+import math
 import numpy as np
-
 import util
+
 from nn.neural_network import Neuron, ArtificialNeuralNetwork
+
+def max_pairwise_distance(cluster1, cluster2):
+    """
+    Computes the maximum pairwise distance for all of the points
+    in the clusters
+    """
+    all_pairs = itertools.product(cluster1, cluster2) # compute all permutations
+    return max([math.sqrt((a-b)**2) for (a,b) in all_pairs])
+
+def compute_variance(clusters):
+    """
+    Computes the variance for the provided clusters. This is an expensive
+    operation as we compute the max pairwise distance between all pairs of
+    clusters.
+    """
+    all_combos = itertools.combinations(clusters, 2)
+
+    max_distance = max([max_pairwise_distance(a,b) for (a,b) in all_combos])
+    return max_distance / math.sqrt(2*len(clusters)) # heuristic for variance
+
 
 class RBFNeuron(Neuron):
 
-    def __init__(self, num_inputs = None, range_low = None, range_high=None,
-    variance=0.1, neuron_json=None):
+    def __init__(self, num_inputs = None, range_low = None, range_high=None, neuron_json=None):
         """
         Constructs an RBF neuron with a center
         that has num_input dimensions
         """
         if neuron_json is None:
             self.center = np.random.uniform(range_low, range_high, num_inputs)
-            self.variance = variance
+            self.variance = None
         else:
             self.center = neuron_json["center"]
             self.variance = neuron_json["variance"]
@@ -51,14 +71,19 @@ class RBFNeuron(Neuron):
 
 class RBFNetwork(ArtificialNeuralNetwork):
 
-    def __init__(self, num_inputs, i_lower_bound=-1.5, i_upper_bound=1.5, num_hidden_units = 10,
-                 variance=0.5, learning_rate = 0.1):
+    def __init__(self, num_inputs, i_lower_bound=-1.5, i_upper_bound=1.5, num_hidden_units = 10, learning_rate = 0.1):
         self.layers = []
-        hidden_layer = [RBFNeuron(num_inputs, i_lower_bound, i_upper_bound, variance) for i in range(num_hidden_units)]
+        hidden_layer = [RBFNeuron(num_inputs, i_lower_bound, i_upper_bound) for i in range(num_hidden_units)]
         output_layer = [Neuron(num_hidden_units, transfer_function="linear")]
         self.layers.append(hidden_layer)
         self.layers.append(output_layer)
         self.learning_rate = learning_rate
+
+        # compute the variance for the clusters
+        variance = compute_variance([neuron.center for neuron in hidden_layer])
+        print("Computed a variance of %f" % variance)
+        for neuron in hidden_layer:
+            neuron.variance = variance
 
     def backprop_error(self, expected_outputs):
         """
@@ -87,6 +112,7 @@ class RBFNetwork(ArtificialNeuralNetwork):
             for j in range(len(inputs)):
                 # update the jth weight for the jth input
                 neuron_weight_gradients.append(self.learning_rate * neuron.delta * inputs[j])
+            neuron_weight_gradients.append(self.learning_rate * neuron.delta)   # bias
             weight_gradients.append(neuron_weight_gradients)
         return weight_gradients
 
@@ -103,6 +129,7 @@ class RBFNetwork(ArtificialNeuralNetwork):
             dweights = weight_changes[i]
             for j in range(len(neuron.weights)):  # for each weight in the neuron
                 neuron.weights[j] += dweights[j]
+                neuron.bias = dweights[-1]
 
     def update_weights(self):
         """
