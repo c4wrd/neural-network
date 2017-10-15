@@ -1,8 +1,7 @@
-import json, random
-import numpy as np
+import json
 
-from neural_network import ArtificialNeuralNetwork, Neuron
-from transfer import DERIVATIVE, FUNCTION, TRANSFER_FUNCTIONS
+from nn.neural_network import ArtificialNeuralNetwork, Neuron
+
 
 class MLFFNetwork(ArtificialNeuralNetwork):
 

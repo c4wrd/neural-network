@@ -1,7 +1,8 @@
-import json, random
+import random
 import numpy as np
 
-from transfer import DERIVATIVE, FUNCTION, TRANSFER_FUNCTIONS
+from nn.transfer import DERIVATIVE, FUNCTION, TRANSFER_FUNCTIONS
+
 
 def get_average_delta_weight(deltas):
     return []
@@ -59,13 +60,18 @@ class ArtificialNeuralNetwork:
         raise NotImplementedError("This is an abstract class and must be inherited!")
 
     def forward(self, inputs):
+        """
+        Forwards the inputs, where inputs is a row in a dataset,
+        through the neurons in each layer and returns the output layer
+        outputs.
+        """
         for layer in self.layers:
-            new_inputs = []
+            outputs = []
             for neuron in layer:
                 output = neuron.forward(inputs)
                 neuron.output = output
-                new_inputs.append(output)
-            inputs = new_inputs
+                outputs.append(output)
+            inputs = outputs # set the inputs to the outputs of the layer
         return inputs
 
     def backprop_output_layer(self, expected_outputs):
@@ -74,7 +80,7 @@ class ArtificialNeuralNetwork:
         in the output layer
         """
         layer = self.layers[-1]
-        for j in range(len(layer)):
+        for j in range(len(layer)): # for each neuron in the output layer
             neuron = layer[j]
             error = expected_outputs[j] - neuron.output
             neuron.delta = error * neuron.transfer_derivative(neuron.output)
@@ -191,6 +197,7 @@ class ArtificialNeuralNetwork:
         return output
 
     def train_batch(self, data, expected_outputs, learning_rate = 0.1):
+        # TODO
         batch_deltas = []
         batch_weights = []
         for i in range(len(data)):
