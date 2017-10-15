@@ -6,8 +6,9 @@ from nn.rbf import *
 from util import KFoldCrossValidation, CachedWriter
 
 num_epochs = int(sys.argv[1])
-dataset = Datasets.random_rosenbrock(2, points=500)
-network = RBFNetwork(2, -3, 3, 20, 0.5)
+dataset = Datasets.random_rosenbrock(2, 500, -1.5, 1.5)
+#dataset = Datasets.linear()[0:100]
+network = RBFNetwork(2, -1.5, 1.5, 20, 1)
 trainer = RBFTrainer(network)
 k = KFoldCrossValidation(dataset, 5)
 training_set = k.get_training_set(0)
