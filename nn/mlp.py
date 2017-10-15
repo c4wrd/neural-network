@@ -1,7 +1,11 @@
 import json
-
 from nn.neural_network import ArtificialNeuralNetwork, Neuron
 
+def get_average_delta_weight(deltas):
+    return []
+
+def get_average_delta(deltas):
+    return []
 
 class MLFFNetwork(ArtificialNeuralNetwork):
 
@@ -35,6 +39,144 @@ class MLFFNetwork(ArtificialNeuralNetwork):
             self.layers.append([Neuron(num_nodes_layer, output_transfer) for i in range(num_outputs)])
         else:
             self.layers.append([Neuron(num_inputs, output_transfer) for i in range(num_outputs)])
+
+    def backprop_output_layer(self, expected_outputs):
+        """
+        A helper method to calculate the error delta for the neurons
+        in the output layer
+        """
+        layer = self.layers[-1]
+        for j in range(len(layer)): # for each neuron in the output layer
+            neuron = layer[j]
+            error = expected_outputs[j] - neuron.output
+            neuron.delta = error * neuron.transfer_derivative(neuron.output)
+        return [neuron.delta for neuron in layer]
+
+    def backprop_hidden_layers(self):
+        """
+        A helper function to backprop the error and calculate the
+        deltas in each neuron in each layer of the hidden layers
+        """
+        # for each neuron in our output layer
+        for i in reversed(range(len(self.layers) - 1)):
+            layer = self.layers[i]
+            for j in range(len(layer)):
+                error = 0.0
+                neuron = layer[j]
+                ds_layer = self.layers[i + 1]
+                for ds_neuron in ds_layer:
+                    error += ds_neuron.weights[j] * ds_neuron.delta
+                neuron.delta = error * neuron.transfer_derivative(neuron.output)
+
+    def calculate_deltas(self, expected_outputs):
+        """
+        Backpropagates the error from the given expected outputs
+        through the network.
+
+        :param expected_outputs The target outputs of the network
+            for which error will be calculated for
+        :returns deltas The array of computed deltas when propagating
+            the expected_outputs
+        """
+        self.backprop_output_layer(expected_outputs)
+        self.backprop_hidden_layers()
+        return [[neuron.delta for neuron in layer] for layer in self.layers]
+
+    def calculate_weight_changes(self, row):
+        """
+        Calculates the weight change for each weight of each neuron
+            in each layer of the network without updating the weights.
+
+        :param row A particular data point for which the weights will
+            be adjusted for
+        :param learning_rate The learning rate to apply during weight update
+            calculations
+        """
+        delta_weights = []
+        for i in range(len(self.layers)):
+            layer_weights = []
+            layer = self.layers[i]
+            inputs = row
+            if i != 0:
+                prev_layer = self.layers[i-1]
+                inputs = [neuron.output for neuron in prev_layer]
+            for neuron in layer:
+                delta_neuron_weights = []
+                for j in range(len(inputs)):
+                    # update the jth weight for the jth input
+                    delta_neuron_weights.append(self.learning_rate * neuron.delta * inputs[j])
+                layer_weights.append(delta_neuron_weights)
+            delta_weights.append(layer_weights)
+        return delta_weights
+
+    def update_weights_with_deltas(self, delta_err, delta_weights):
+        """
+        Updates the weights for each neuron in each layer according
+        to the provided delta_err and delta_weight inputs. This is useful
+        for batch (or mini batch) gradient descent.
+        """
+        for l in range(len(delta_weights)):
+            layer_weights = delta_weights[l]
+            for n in range(len(layer_weights)):
+                neuron_weights = layer_weights[n]
+                neuron = self.layers[l][n]
+                for w in range(len(neuron.weights)):
+                    neuron.weights[w] += neuron_weights[w]
+                neuron.bias += self.learning_rate * delta_err[l][n]
+
+    def update_weights(self, row):
+        """
+        Updates the weights for all of the layers in the network
+            from a single data point (stochastic gradient descent).
+
+        :param row A particular data point for which the weights will
+            be adjusted for
+        """
+        for i in range(len(self.layers)):
+            layer = self.layers[i]
+            inputs = row
+            if i != 0:
+                prev_layer = self.layers[i-1]
+                inputs = [neuron.output for neuron in prev_layer]
+            for neuron in layer:
+                for j in range(len(inputs)):
+                    # update the jth weight for the jth input
+                    neuron.weights[j] += self.learning_rate * neuron.delta * inputs[j]
+                neuron.bias += self.learning_rate * neuron.delta
+
+    def train(self, data, expected_outputs):
+        """
+        Trains the neural network on an expected data point.
+
+        :param data An array of feature values constituting one
+            data point in a data set
+        :param expected_outputs The expected outputs of the given
+            data row
+        :param learning_rate The learning rate for which weights
+            will be adjusted
+        """
+        output = self.forward(data)
+        self.calculate_deltas(expected_outputs)
+        self.update_weights(data)
+        return output
+
+    def train_batch(self, data, expected_outputs):
+        # TODO
+        batch_deltas = []
+        batch_weights = []
+        for i in range(len(data)):
+            row = data[i]
+            expected = expected_outputs[i]
+            output = self.forward(row)
+            d_errs = self.calculate_deltas(expected)
+            batch_deltas.append(d_errs)
+            dweights = self.get_delta_weights(row)
+            batch_weights.append(dweights)
+        # compute average delta error
+        avg_derr = get_average_delta(batch_deltas)
+        # compute average delta weight change
+        avg_dweights = get_average_delta_weight(batch_weights)
+        self.update_weights_with_deltas(avg_derr, avg_dweights)
 
 class PretrainedMLPNetwork(MLFFNetwork):
 
@@ -71,6 +213,7 @@ class MLPNetworkTrainer:
         """
         Train for function approximation (one linear output)
         """
+        self.network.set_learning_rate(learning_rate)
         if num_epochs == -1:
             num_epochs = 1000000000000
         for epoch in range(start_epoch, start_epoch + num_epochs):
@@ -78,7 +221,7 @@ class MLPNetworkTrainer:
             for row in dataset:
                 inputs = row[:-1]
                 expected = row[-1:]
-                output = self.network.train(inputs, expected, learning_rate)[0]
+                output = self.network.train(inputs, expected)[0]
                 sum_error += (expected - output)**2
             yield [epoch, sum_error/2]
             # print(">epoch=%d, lrate=%.3f, error=%.3f" % (epoch, learning_rate, sum_error))
@@ -108,7 +251,7 @@ class MLPNetworkTrainer:
                 expected = [0 for i in range(num_classes)]
                 expected_class = row[-1]
                 expected[expected_class] = 1
-                output = self.network.train(features, expected, learning_rate)
+                output = self.network.train(features, expected)
                 sum_error = sum([(expected[i] - output[i])**2 for i in range(num_classes)])
                 yield dict(epoch=epoch, error=sum_error)
             # print('>epoch=%d, lrate=%.3f, sum_error=%.3f' % (epoch, learning_rate, sum_error))

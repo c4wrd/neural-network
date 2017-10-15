@@ -1,14 +1,25 @@
 import random
+import csv
 from collections import deque
 
-class CachedWriter:
-    def __init__(self, writer):
-        self.writer = writer
+from nn.neural_network import ArtificialNeuralNetwork
+
+
+class QueuedCsvWriter:
+    """
+    Wrapper around the built-in CSV writer
+    that will write lines in blocks for performance
+    reasons.
+    """
+    def __init__(self, result_file_name, header_row):
+        self.file = open(result_file_name, "w+")
+        self.writer = csv.writer(self.file)
+        self.writer.writerow(header_row)
         self.queue = deque()
 
-    def write_row(self, row):
+    def writerow(self, row):
         self.queue.append(row)
-        if len(self.queue) == 100:
+        if len(self.queue) == 50:
             while self.queue:
                 self.writer.writerow(self.queue.popleft())
 
@@ -55,3 +66,12 @@ class KFoldCrossValidation:
         :param fold_index The fold to retrieve
         """
         return self.folds[fold_index]
+
+def mean_squared_error(dataset, network: ArtificialNeuralNetwork):
+    sum_error = 0
+    for row in dataset:
+        inputs = row[:-1]
+        expected = row[-1:]
+        output = network.forward(inputs)
+        sum_error += (expected[0] - output[0])**2
+    return sum_error / 2
