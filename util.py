@@ -75,3 +75,15 @@ def mean_squared_error(dataset, network: ArtificialNeuralNetwork):
         output = network.forward(inputs)
         sum_error += (expected[0] - output[0])**2
     return sum_error / 2
+
+def chunk_array(array, chunk_size):
+    """
+    Splits an array into chunk_size subarrays
+    :param array: The array to split
+    :param chunk_size: The max size of each chunk_array
+    :return:
+    """
+    chunks = []
+    for i in range(0, len(array), chunk_size):
+        chunks.append(array[i:i+chunk_size])
+    return chunks
