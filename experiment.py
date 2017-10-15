@@ -113,7 +113,7 @@ Starting experiment.
         1000 epochs, suggesting the model is still extremely
         volatile and will not converge.
         """
-        if self.epoch > 100: # we must run at least 1000 epochs before we check this
+        if self.epoch > 1000: # we must run at least 1000 epochs before we check this
             sum_diff = 0
             for i in reversed(range(1, len(self.mse_validation_queue))):
                 diff = self.mse_validation_queue[i] - self.mse_validation_queue[i-1]
