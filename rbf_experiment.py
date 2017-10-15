@@ -15,16 +15,17 @@ validation_set = k.get_validation_set(0)
 
 results_file = open("results.csv", "w+")
 writer = csv.writer(results_file)
-writer.writerow(["epoch", "mse"])
+writer.writerow(["epoch", "mse", "sum_error"])
 writer = CachedWriter(writer)
 
 def run():
     for [epoch, sum_error] in trainer.train_regression(training_set, learning_rate=0.1, num_epochs=num_epochs):
-        writer.write_row([str(epoch), "%.3f" % sum_error])
+        mse = trainer.mean_squared_error(validation_set)
+        writer.write_row([str(epoch), "%f" % mse, "%f" % sum_error])
         # if epoch % 10 == 0:
         #     mse = trainer.mean_squared_error(validation_set)
         #     print("epoch %d, validation_mse=%.3f, sum_error=%.3f" % (epoch, mse, sum_error))
-        print("epoch %d, sum_error=%.3f" % (epoch, sum_error))
+        print("epoch %d, mse=%.3f, sum_error=%.3f" % (epoch, mse, sum_error))
 
 try:
     run()

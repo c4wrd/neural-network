@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3431f957-0c2e-451a-af10-689da381adc7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mlff_experiment.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nn/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nn/rbf.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rbf_experiment.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/util.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/experiment.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/kfold.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/rosenbrock.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/mlp.py" afterPath="$PROJECT_DIR$/nn/mlp.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/neural_network.py" afterPath="$PROJECT_DIR$/nn/neural_network.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/transfer.py" afterPath="$PROJECT_DIR$/nn/transfer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dataset.py" afterPath="$PROJECT_DIR$/dataset.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rbf_experiment.py" afterPath="$PROJECT_DIR$/rbf_experiment.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -61,8 +48,8 @@
       <file leaf-file-name="rbf_experiment.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rbf_experiment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="21" column="88" lean-forward="false" selection-start-line="21" selection-start-column="88" selection-end-line="21" selection-end-column="88" />
+            <state relative-caret-position="510">
+              <caret line="15" column="40" lean-forward="true" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -433,8 +420,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rbf_experiment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="21" column="88" lean-forward="false" selection-start-line="21" selection-start-column="88" selection-end-line="21" selection-end-column="88" />
+        <state relative-caret-position="510">
+          <caret line="15" column="40" lean-forward="true" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
