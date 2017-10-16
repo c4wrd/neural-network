@@ -37,7 +37,7 @@ class RBFNeuron(Neuron):
             self.center = np.random.uniform(range_low, range_high, num_inputs)
             self.variance = None
         else:
-            self.center = neuron_json["center"]
+            self.center = np.array(neuron_json["center"])
             self.variance = neuron_json["variance"]
 
     def activate(self, inputs):
