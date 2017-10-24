@@ -99,11 +99,12 @@ class MLFFNetwork(ArtificialNeuralNetwork):
                 prev_layer = self.layers[i-1]
                 inputs = [neuron.output for neuron in prev_layer]
             for neuron in layer:
+                lrate_tdelta = self.learning_rate * neuron.delta
                 neuron_gradients = []
                 for j in range(len(inputs)):
                     # update the jth weight for the jth input
-                    neuron_gradients.append(self.learning_rate * neuron.delta * inputs[j])
-                neuron_gradients.append(self.learning_rate * neuron.delta) # store the bias change last in the array
+                    neuron_gradients.append(lrate_tdelta * inputs[j])
+                neuron_gradients.append(lrate_tdelta) # store the bias change last in the array
                 layer_gradients.append(neuron_gradients)
             weight_gradients.append(layer_gradients)
         return weight_gradients
