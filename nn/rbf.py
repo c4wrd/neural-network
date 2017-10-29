@@ -80,6 +80,7 @@ class RBFNetwork(ArtificialNeuralNetwork):
         self.learning_rate = learning_rate
 
         # compute the variance for the clusters
+        # variance = 0.5 # 
         variance = compute_variance([neuron.center for neuron in hidden_layer])
         print("Computed a variance of %f" % variance)
         for neuron in hidden_layer:
@@ -180,18 +181,20 @@ class RBFTrainer:
         self.validation_set = validation_set
         self.should_train = True
 
-    def train_regression_incremental(self, dataset, learning_rate=0.1, num_epochs=100, start_epoch=0):
+    def train_regression_incremental(self, learning_rate=0.1, num_epochs=100, start_epoch=0):
         self.network.set_learning_rate(learning_rate)
         if num_epochs == -1:
             num_epochs = 1000000000000
         for epoch in range(start_epoch, start_epoch + num_epochs):
             sum_error = 0
-            for row in dataset:
+            for row in self.training_set:
                 inputs = row[:-1]
                 expected = row[-1:]
                 output = self.network.train(inputs, expected)[0]
                 sum_error += (expected - output)**2
-            yield [epoch, sum_error/2]
+            mse_train = sum_error / 2
+            mse_validation = util.mean_squared_error(self.validation_set, self.network)
+            yield [epoch, mse_train, mse_validation]
 
     def train_regression_batch(self, batch_size=None, learning_rate=0.1, num_epochs=100, start_epoch=0):
         """

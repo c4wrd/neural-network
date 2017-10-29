@@ -22,22 +22,22 @@ class Datasets:
     ]
 
     @staticmethod
-    def squares():
+    def squares(num_points=1000, low=0, high=1000):
         data = []
-        for i in range(1000):
-            val = random.random()
+        for i in range(num_points):
+            val = random.randint(low, high)
             data.append([val, val**2])
         return data
 
     @staticmethod
-    def linear():
+    def linear(num_points=1000, low=0, high=5):
         """
         Computes a random dataset composed of a specified
         linear function for testing backpropagation
         """
         data = []
-        for i in range(1000):
-            val = random.random() * 5
+        xvals = np.random.uniform(low, high, num_points)
+        for val in xvals:
             data.append([val, 2*val + 5])
         return data
             
