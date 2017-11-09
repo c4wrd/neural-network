@@ -37,6 +37,9 @@ class Neuron:
         """
         return self.transfer_fx[DERIVATIVE](value)
 
+    def get_weights(self):
+        return [*self.weights, self.bias]
+
     def json(self):
         return dict(
             weights = [float(weight) for weight in self.weights],

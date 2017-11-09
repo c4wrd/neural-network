@@ -3,22 +3,39 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+!_TAG_PROGRAM_VERSION	5.8	//
+ArtificialNeuralNetwork	../experiment.py	/^from nn.neural_network import ArtificialNeuralNetwork$/;"	kind:namespace	line:5
+ArtificialNeuralNetwork	../nn/mlff.py	/^from nn.neural_network import ArtificialNeuralNetwork, Neuron$/;"	kind:namespace	line:6
 ArtificialNeuralNetwork	../nn/neural_network.py	/^class ArtificialNeuralNetwork:$/;"	kind:class	line:47
+ArtificialNeuralNetwork	../nn/rbf.py	/^from nn.neural_network import Neuron, ArtificialNeuralNetwork$/;"	kind:namespace	line:7
+ArtificialNeuralNetwork	../nn/trainer.py	/^from nn.neural_network import ArtificialNeuralNetwork$/;"	kind:namespace	line:5
+ArtificialNeuralNetwork	../util.py	/^from nn.neural_network import ArtificialNeuralNetwork$/;"	kind:namespace	line:5
+DERIVATIVE	../nn/neural_network.py	/^from nn.transfer import DERIVATIVE, FUNCTION, TRANSFER_FUNCTIONS$/;"	kind:namespace	line:4
 DERIVATIVE	../nn/transfer.py	/^DERIVATIVE = "derivative"$/;"	kind:variable	line:4
 Datasets	../dataset.py	/^class Datasets:$/;"	kind:class	line:13
+Datasets	../mlff_experiment.py	/^from dataset import Datasets$/;"	kind:namespace	line:4
+Datasets	../nn/mlff.py	/^from dataset import Datasets$/;"	kind:namespace	line:5
+Datasets	../rbf_experiment.py	/^from dataset import Datasets$/;"	kind:namespace	line:4
 Experiment	../experiment.py	/^class Experiment:$/;"	kind:class	line:16
+FUNCTION	../nn/neural_network.py	/^from nn.transfer import DERIVATIVE, FUNCTION, TRANSFER_FUNCTIONS$/;"	kind:namespace	line:4
 FUNCTION	../nn/transfer.py	/^FUNCTION = "function"$/;"	kind:variable	line:3
 KFoldCrossValidation	../util.py	/^class KFoldCrossValidation:$/;"	kind:class	line:32
 MLFFNetwork	../nn/mlff.py	/^class MLFFNetwork(ArtificialNeuralNetwork):$/;"	kind:class	line:8
+MLFFNetwork	../nn/trainer.py	/^from nn.mlff import MLFFNetwork$/;"	kind:namespace	line:4
+NetworkTrainer	../experiment.py	/^from nn.trainer import NetworkTrainer$/;"	kind:namespace	line:6
 NetworkTrainer	../nn/trainer.py	/^class NetworkTrainer:$/;"	kind:class	line:37
+Neuron	../nn/mlff.py	/^from nn.neural_network import ArtificialNeuralNetwork, Neuron$/;"	kind:namespace	line:6
 Neuron	../nn/neural_network.py	/^class Neuron:$/;"	kind:class	line:6
+Neuron	../nn/rbf.py	/^from nn.neural_network import Neuron, ArtificialNeuralNetwork$/;"	kind:namespace	line:7
 PretrainedMLPNetwork	../nn/mlff.py	/^class PretrainedMLPNetwork(MLFFNetwork):$/;"	kind:class	line:170
 PretrainedRBFNetwork	../nn/rbf.py	/^class PretrainedRBFNetwork(RBFNetwork):$/;"	kind:class	line:164
+QueuedCsvWriter	../experiment.py	/^from util import QueuedCsvWriter$/;"	kind:namespace	line:7
 QueuedCsvWriter	../util.py	/^class QueuedCsvWriter:$/;"	kind:class	line:8
 RBFNetwork	../nn/rbf.py	/^class RBFNetwork(ArtificialNeuralNetwork):$/;"	kind:class	line:72
+RBFNetwork	../nn/trainer.py	/^from nn.rbf import RBFNetwork$/;"	kind:namespace	line:6
 RBFNeuron	../nn/rbf.py	/^class RBFNeuron(Neuron):$/;"	kind:class	line:29
 RBFTrainer	../nn/rbf.py	/^class RBFTrainer:$/;"	kind:class	line:175
+TRANSFER_FUNCTIONS	../nn/neural_network.py	/^from nn.transfer import DERIVATIVE, FUNCTION, TRANSFER_FUNCTIONS$/;"	kind:namespace	line:4
 TRANSFER_FUNCTIONS	../nn/transfer.py	/^TRANSFER_FUNCTIONS = {$/;"	kind:variable	line:24
 __init__	../experiment.py	/^    def __init__(self, network: ArtificialNeuralNetwork,$/;"	kind:member	line:18
 __init__	../nn/mlff.py	/^    def __init__(self, network_json_str):$/;"	kind:member	line:172
@@ -38,6 +55,8 @@ activate	../nn/rbf.py	/^    def activate(self, inputs):$/;"	kind:member	line:43
 apply_weight_gradients	../nn/mlff.py	/^    def apply_weight_gradients(self, delta_weights):$/;"	kind:member	line:112
 apply_weight_gradients	../nn/neural_network.py	/^    def apply_weight_gradients(self, *args):$/;"	kind:member	line:80
 apply_weight_gradients	../nn/rbf.py	/^    def apply_weight_gradients(self, weight_changes):$/;"	kind:member	line:120
+argparse	../mlff_experiment.py	/^import argparse$/;"	kind:namespace	line:1
+argparse	../rbf_experiment.py	/^import argparse$/;"	kind:namespace	line:1
 args	../mlff_experiment.py	/^    args = parser.parse_args()$/;"	kind:variable	line:18
 args	../rbf_experiment.py	/^    args = parser.parse_args()$/;"	kind:variable	line:17
 average_validation_err_increasing	../experiment.py	/^    def average_validation_err_increasing(self):$/;"	kind:member	line:107
@@ -49,10 +68,13 @@ calculate_weight_gradients	../nn/mlff.py	/^    def calculate_weight_gradients(se
 calculate_weight_gradients	../nn/rbf.py	/^    def calculate_weight_gradients(self):$/;"	kind:member	line:102
 chunk_array	../util.py	/^def chunk_array(array, chunk_size):$/;"	kind:function	line:80
 compute_variance	../nn/rbf.py	/^def compute_variance(clusters):$/;"	kind:function	line:17
+csv	../util.py	/^import csv$/;"	kind:namespace	line:2
 dataset	../mlff_experiment.py	/^    dataset = Datasets.random_rosenbrock(args.num_inputs, args.num_points)$/;"	kind:variable	line:20
 dataset	../rbf_experiment.py	/^    dataset = Datasets.random_rosenbrock(args.num_inputs, args.num_points)$/;"	kind:variable	line:19
 dataset.py	../dataset.py	1;"	kind:file	line:1
 delta	../nn/neural_network.py	/^    delta = None$/;"	kind:variable	line:8
+deque	../experiment.py	/^from collections import deque$/;"	kind:namespace	line:4
+deque	../util.py	/^from collections import deque$/;"	kind:namespace	line:3
 err_not_changing	../experiment.py	/^    def err_not_changing(self, err_queue: deque):$/;"	kind:member	line:95
 exit_handler	../experiment.py	/^    def exit_handler(self):$/;"	kind:member	line:127
 experiment	../mlff_experiment.py	/^    experiment = Experiment(network, dataset, args.results, args.models)$/;"	kind:variable	line:22
@@ -68,9 +90,13 @@ get_training_set	../util.py	/^    def get_training_set(self, fold_index):$/;"	ki
 get_validation_set	../util.py	/^    def get_validation_set(self, fold_index):$/;"	kind:member	line:61
 input_layer	../nn/mlff.py	/^    input_layer = None$/;"	kind:variable	line:10
 input_layer	../nn/neural_network.py	/^    input_layer = None$/;"	kind:variable	line:49
+itertools	../nn/rbf.py	/^import itertools$/;"	kind:namespace	line:1
+json	../experiment.py	/^import json$/;"	kind:namespace	line:1
+json	../nn/mlff.py	/^import json$/;"	kind:namespace	line:1
 json	../nn/neural_network.py	/^    def json(self):$/;"	kind:member	line:40
 json	../nn/neural_network.py	/^    def json(self):$/;"	kind:member	line:83
 json	../nn/rbf.py	/^    def json(self):$/;"	kind:member	line:66
+json	../nn/rbf.py	/^import json$/;"	kind:namespace	line:2
 layers	../nn/mlff.py	/^    layers = None$/;"	kind:variable	line:11
 layers	../nn/neural_network.py	/^    layers = None$/;"	kind:variable	line:50
 learning_rate	../nn/neural_network.py	/^    learning_rate = 0.1$/;"	kind:variable	line:51
@@ -79,6 +105,7 @@ linear	../nn/transfer.py	/^def linear(value):$/;"	kind:function	line:12
 linear_deriv	../nn/transfer.py	/^def linear_deriv(value):$/;"	kind:function	line:15
 logistic	../nn/transfer.py	/^def logistic(value):$/;"	kind:function	line:6
 logistic_deriv	../nn/transfer.py	/^def logistic_deriv(value):$/;"	kind:function	line:9
+math	../nn/rbf.py	/^import math$/;"	kind:namespace	line:3
 max_pairwise_distance	../nn/rbf.py	/^def max_pairwise_distance(cluster1, cluster2):$/;"	kind:function	line:9
 mean_squared_error	../util.py	/^def mean_squared_error(dataset, network: ArtificialNeuralNetwork):$/;"	kind:function	line:71
 mlff.py	../nn/mlff.py	1;"	kind:file	line:1
@@ -86,12 +113,22 @@ mlff_experiment.py	../mlff_experiment.py	1;"	kind:file	line:1
 network	../mlff_experiment.py	/^    network = MLFFNetwork(args.num_inputs, args.num_hidden_layers, args.num_nodes_layer)$/;"	kind:variable	line:21
 network	../rbf_experiment.py	/^    network = RBFNetwork(args.num_inputs, num_hidden_units=args.num_gaussian)$/;"	kind:variable	line:20
 neural_network.py	../nn/neural_network.py	1;"	kind:file	line:1
+np	../dataset.py	/^import numpy as np$/;"	kind:namespace	line:2
+np	../experiment.py	/^import numpy as np$/;"	kind:namespace	line:2
+np	../nn/mlff.py	/^import numpy as np$/;"	kind:namespace	line:3
+np	../nn/neural_network.py	/^import numpy as np$/;"	kind:namespace	line:2
+np	../nn/rbf.py	/^import numpy as np$/;"	kind:namespace	line:4
+np	../nn/trainer.py	/^import numpy as np$/;"	kind:namespace	line:2
+np	../nn/transfer.py	/^import numpy as np$/;"	kind:namespace	line:1
 on_exit	../mlff_experiment.py	/^    def on_exit(*args):$/;"	kind:function	line:24
 on_exit	../rbf_experiment.py	/^    def on_exit(*args):$/;"	kind:function	line:23
 output	../nn/neural_network.py	/^    output = None$/;"	kind:variable	line:9
 parser	../mlff_experiment.py	/^parser = argparse.ArgumentParser()$/;"	kind:variable	line:9
 parser	../rbf_experiment.py	/^parser = argparse.ArgumentParser()$/;"	kind:variable	line:9
 partition	../experiment.py	/^def partition(dataset):$/;"	kind:function	line:9
+random	../dataset.py	/^import random$/;"	kind:namespace	line:1
+random	../nn/neural_network.py	/^import random$/;"	kind:namespace	line:1
+random	../util.py	/^import random$/;"	kind:namespace	line:1
 random_rosenbrock	../dataset.py	/^    def random_rosenbrock(numx = 2, points = 100, lower_bound = -2, upper_bound = 2,$/;"	kind:member	line:45
 rbf.py	../nn/rbf.py	1;"	kind:file	line:1
 rbf_experiment.py	../rbf_experiment.py	1;"	kind:file	line:1
@@ -100,8 +137,12 @@ run	../experiment.py	/^    def run(self):$/;"	kind:member	line:62
 save_model	../experiment.py	/^    def save_model(self, epoch):$/;"	kind:member	line:77
 set_learning_rate	../nn/neural_network.py	/^    def set_learning_rate(self, learning_rate):$/;"	kind:member	line:56
 should_stop_training	../experiment.py	/^    def should_stop_training(self):$/;"	kind:member	line:82
+signal	../mlff_experiment.py	/^import signal$/;"	kind:namespace	line:2
+signal	../rbf_experiment.py	/^import signal$/;"	kind:namespace	line:2
 squares	../dataset.py	/^    def squares(num_points=1000, low=0, high=1000):$/;"	kind:member	line:25
 stop	../nn/trainer.py	/^    def stop(self):$/;"	kind:member	line:120
+sys	../mlff_experiment.py	/^import sys$/;"	kind:namespace	line:3
+sys	../rbf_experiment.py	/^import sys$/;"	kind:namespace	line:3
 tanh	../nn/transfer.py	/^def tanh(value):$/;"	kind:function	line:18
 tanh_deriv	../nn/transfer.py	/^def tanh_deriv(value):$/;"	kind:function	line:21
 train	../nn/mlff.py	/^    def train(self, inputs, expected_outputs):$/;"	kind:member	line:148
@@ -122,6 +163,9 @@ transfer_derivative	../nn/neural_network.py	/^    def transfer_derivative(self, 
 transfer_derivative	../nn/rbf.py	/^    def transfer_derivative(self, inputs):$/;"	kind:member	line:59
 update_weights	../nn/mlff.py	/^    def update_weights(self, row):$/;"	kind:member	line:126
 update_weights	../nn/rbf.py	/^    def update_weights(self):$/;"	kind:member	line:135
+util	../nn/mlff.py	/^import util$/;"	kind:namespace	line:2
+util	../nn/rbf.py	/^import util$/;"	kind:namespace	line:5
+util	../nn/trainer.py	/^import util$/;"	kind:namespace	line:1
 util.py	../util.py	1;"	kind:file	line:1
 writerow	../util.py	/^    def writerow(self, row):$/;"	kind:member	line:21
 xor	../dataset.py	/^    def xor():$/;"	kind:member	line:16
