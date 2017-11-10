@@ -44,14 +44,17 @@ class GATrainer:
     
     def __init_population__(self):
         for i in range(self.pop_size):
-            network = MLFFNetwork(
-                num_inputs=self.network_shape[0],
-                num_hidden_layers=self.network_shape[1],
-                num_nodes_layer=self.network_shape[2],
-                num_outputs=self.network_shape[3],
-                output_transfer=self.output_transfer
-            )
+            network = self.create_individual()
             self.population.append(network)
+
+    def create_individual(self):
+        return MLFFNetwork(
+            num_inputs=self.network_shape[0],
+            num_hidden_layers=self.network_shape[1],
+            num_nodes_layer=self.network_shape[2],
+            num_outputs=self.network_shape[3],
+            output_transfer=self.output_transfer
+        )
 
 
     def select_parent(self):
@@ -93,4 +96,18 @@ class GATrainer:
         self.population = [individual for individual, fitness in new_population]
 
     def crossover(self, p1: MLFFNetwork, p2: MLFFNetwork):
-        pass
+        c1 = self.create_individual()
+        c2 = self.create_individual()
+        num_weights = p1.num_weights + p1.num_bias_weights
+        # choose crossover point
+        crossover_point = random.randint(0, num_weights)
+        current_index = 0
+        for layer in layer: # need to do index based
+            for neuron in layer: # need ot index based
+                weights = neuron.get_weights()
+                for i in range(len(weights)):
+                    if current_index == crossover_point:
+                        pass
+                    else:
+                        pass
+                    current_index += 1

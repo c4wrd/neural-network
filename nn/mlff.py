@@ -28,8 +28,13 @@ class MLFFNetwork(ArtificialNeuralNetwork):
         :param output_transfer (optional) The string name of the transfer function used
             in the output layer
         """
+        # set the momentum factor
         self.momentum_factor = momentum_factor
+        # initialize the layers of neurons
         self.layers = []
+        # calculate number of weights in the network (for crossover)
+        self.num_weights = (num_inputs * num_nodes_layer) + ((num_hidden_layers-1) * num_nodes_layer) + (num_nodes_layer * num_outputs)
+        self.num_bias_weights = (num_nodes_layer * num_hidden_layers) + (num_outputs)
         if num_hidden_layers > 0:
             # the first hidden layer must num_inputs inputs, whereas
             # all subsequent layers must have num_nodes_layer inputs
