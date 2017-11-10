@@ -11,9 +11,13 @@ class MLFFNetwork(ArtificialNeuralNetwork):
     layers = None
     momentum_factor = 0.5
 
-    def __init__(self, num_inputs, num_hidden_layers = 1, 
-                num_nodes_layer = 3, num_outputs = 1,
-                hidden_transfer = "logistic", output_transfer = "linear",
+    def __init__(self,
+                 num_inputs,
+                 num_hidden_layers = 1,
+                 num_nodes_layer = 3,
+                 num_outputs = 1,
+                 hidden_transfer = "logistic",
+                 output_transfer = "linear",
                  momentum_factor=0.5):
         """
         Constructs an instance of a multi-layer feed forward

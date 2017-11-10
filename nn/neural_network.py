@@ -42,6 +42,20 @@ class Neuron:
         """
         return self.transfer_fx[DERIVATIVE](value)
 
+    def get_weights(self):
+        """
+        Returns a weight vector, including the bias as the last value
+        :return:
+        """
+        return [*self.weights, self.bias]
+
+    def set_weight(self, weight_index, value):
+        if weight_index == len(self.weights):
+            # update the bias value
+            self.bias = value
+        else:
+            self.weights[weight_index] = value
+
     def json(self):
         return dict(
             weights = [float(weight) for weight in self.weights],
@@ -99,3 +113,11 @@ class ArtificialNeuralNetwork:
             json_network["hidden"] = [[neuron.json() for neuron in layer] for layer in self.layers[:-1]]
         
         return json_network
+
+class NetworkShape:
+
+    def __init__(self, num_inputs, num_hidden_layers, num_hidden_nodes, num_outputs):
+        self.num_inputs = num_inputs
+        self.num_hidden_layers = num_hidden_layers
+        self.num_hidden_nodes = num_hidden_nodes
+        self.num_outputs = num_outputs
