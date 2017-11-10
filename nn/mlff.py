@@ -9,10 +9,12 @@ class MLFFNetwork(ArtificialNeuralNetwork):
 
     input_layer = None
     layers = None
+    momentum_factor = 0.5
 
     def __init__(self, num_inputs, num_hidden_layers = 1, 
                 num_nodes_layer = 3, num_outputs = 1,
-                hidden_transfer = "logistic", output_transfer = "linear"):
+                hidden_transfer = "logistic", output_transfer = "linear",
+                 momentum_factor=0.5):
         """
         Constructs an instance of a multi-layer feed forward
         neural network. 
@@ -26,6 +28,7 @@ class MLFFNetwork(ArtificialNeuralNetwork):
         :param output_transfer (optional) The string name of the transfer function used
             in the output layer
         """
+        self.momentum_factor = momentum_factor
         self.layers = []
         if num_hidden_layers > 0:
             # the first hidden layer must num_inputs inputs, whereas
@@ -120,7 +123,12 @@ class MLFFNetwork(ArtificialNeuralNetwork):
                 neuron_weights = layer_weights[n]
                 neuron = self.layers[l][n]
                 for w in range(len(neuron.weights)):
-                    neuron.weights[w] += neuron_weights[w] # update the weight with the weight change
+                    if w in neuron.dw:
+                        # update the weight with the weight change and momentum from previous change
+                        neuron.weights[w] += neuron_weights[w] + (self.momentum_factor * neuron.dw[w])
+                    else:
+                        neuron.weights[w] += neuron_weights[w]
+                    neuron.dw[w] = neuron_weights[w]
                 neuron.bias += neuron_weights[-1] # the bias is stored at the last weight index
 
     def update_weights(self, row):

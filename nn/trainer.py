@@ -36,14 +36,18 @@ def get_mean_gradients_mlff(dweights):
 
 class NetworkTrainer:
 
-    def __init__(self, network: ArtificialNeuralNetwork, training_set, validation_set, learning_rate=0.1):
+    def __init__(self, network: ArtificialNeuralNetwork, training_set, validation_set, learning_rate=0.1, classification=False, num_classes=None):
         network.set_learning_rate(learning_rate)
         self.network = network
-        self.training_set = training_set
-        self.validation_set = validation_set
+        if not classification:
+            self.training_set = training_set
+            self.validation_set = validation_set
+        else:
+            self.training_set = self.transform(training_set, num_classes)
+            self.validation_set = self.transform(validation_set, num_classes)
         self.should_train = True
 
-    def train_regression_incremental(self, max_epochs=-1, start_epoch=0, learning_rate = 0.1):
+    def train_incremental(self, max_epochs=-1, start_epoch=0, learning_rate = 0.1):
         """
         Trains the network on incrementally.
         """
@@ -54,9 +58,12 @@ class NetworkTrainer:
             sum_error = 0
             for row in self.training_set:
                 inputs = row[:-1]
-                expected = row[-1:]
-                output = self.network.train(inputs, expected)
-                sum_error += (expected[0] - output[0])**2
+                expected = row[-1]
+                if not isinstance(expected, list):
+                    expected = [expected]
+                outputs = self.network.train(inputs, expected)
+                for i in range(len(outputs)):
+                    sum_error += (expected[i] - outputs[i]) ** 2
 
             mse_training_set = sum_error / 2
             mse_validation_set = util.mean_squared_error(self.validation_set, self.network)
@@ -64,7 +71,7 @@ class NetworkTrainer:
             # yield the epoch and errors to determine whether training should continue
             yield [epoch, mse_training_set, mse_validation_set]
 
-    def train_regression_batch(self, learning_rate=0.1, max_epochs=-1, start_epoch=0, batch_size=None):
+    def train_batch(self, learning_rate=0.1, max_epochs=-1, start_epoch=0, batch_size=None, classify=False, num_classes=None):
         self.network.set_learning_rate(learning_rate)
 
         batches = None
@@ -89,10 +96,13 @@ class NetworkTrainer:
                 batch_dweights = []  # array of weight changes for data points in this batch
                 for row in batch:
                     inputs = row[:-1]
-                    expected = row[-1:]
-                    [output, dweights] = self.network.train_without_update(inputs, expected)  # calculate the outputs
+                    expected = row[-1]
+                    if not isinstance(expected, list):
+                        expected = [expected]
+                    [outputs, dweights] = self.network.train_without_update(inputs, expected)  # calculate the outputs
                     batch_dweights.append(dweights)
-                    sum_error += (expected[0] - output[0]) ** 2
+                    for i in range(len(outputs)):
+                        sum_error += (expected[i] - outputs[i]) ** 2
 
                 # compute the mean weight gradient matrix
                 mean_dweights = self.get_mean_gradients(batch_dweights)
@@ -124,3 +134,13 @@ class NetworkTrainer:
         is overfitting.
         """
         self.should_train = False
+
+    def transform(self, dataset, num_classes):
+        fixed = []
+        for row in dataset:
+            features = row[:-1]
+            expected_class = row[-1]
+            expected = [0 for i in range(num_classes)]
+            expected[expected_class] = 1
+            fixed.append([*features, expected])
+        return fixed

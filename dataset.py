@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import csv
 
 def rosenbrock(*x):
     x_total = len(x)
@@ -58,5 +59,19 @@ class Datasets:
         for i in range(points):
             values = np.random.uniform(lower_bound, upper_bound, numx)
             result = rosenbrock(*values)
-            data.append(np.append(values, result))
+            data.append((*values, [result]))
+        return data
+
+    @staticmethod
+    def seeds():
+        f = open("dataset_files/seeds.txt")
+        writer = csv.reader(f.readlines(), delimiter="\t")
+        data = []
+        for row in writer:
+            try:
+                result = [float(val) for val in row[:-1] if len(val.strip()) > 0]
+                result.append(int(row[-1]) - 1)
+                data.append(result)
+            except:
+                print(row)
         return data

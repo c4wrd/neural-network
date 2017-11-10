@@ -72,9 +72,12 @@ def mean_squared_error(dataset, network: ArtificialNeuralNetwork):
     sum_error = 0
     for row in dataset:
         inputs = row[:-1]
-        expected = row[-1:]
-        output = network.forward(inputs)
-        sum_error += (expected[0] - output[0])**2
+        expected = row[-1]
+        if not isinstance(expected, list):
+            expected = [expected]
+        outputs = network.forward(inputs)
+        for i in range(len(outputs)):
+            sum_error += (expected[i] - outputs[i])**2
     return sum_error / 2
 
 def chunk_array(array, chunk_size):

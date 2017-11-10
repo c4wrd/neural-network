@@ -7,10 +7,12 @@ class Neuron:
 
     delta = None
     output = None
+    dw = None
 
     def __init__(self, num_inputs = None, transfer_function = "logistic",
                 neuron_json = None):
         if neuron_json is None:
+            #self.weights = np.random.uniform(0, 1, num_inputs)
             self.weights = np.random.rand(num_inputs)
             self.bias = random.random()
         else:
@@ -21,6 +23,7 @@ class Neuron:
             raise "Invalid transfer function %s" % transfer_function
         self.transfer_fx = TRANSFER_FUNCTIONS[transfer_function]
         self.transfer_fx_name = transfer_function
+        self.dw = {} # store weight updates from previous iterations
 
     def forward(self, inputs):
         return self.transfer(self.activate(inputs))

@@ -1,6 +1,6 @@
 import json
 import numpy as np
-
+import random
 from collections import deque
 from nn.neural_network import ArtificialNeuralNetwork
 from nn.trainer import NetworkTrainer
@@ -10,6 +10,7 @@ def partition(dataset):
     """
     Returns a 70/30 split of the dataset
     """
+    random.shuffle(dataset)
     train_index = int(0.7*len(dataset))
     return [dataset[:train_index], dataset[train_index:]]
 
@@ -20,7 +21,9 @@ class Experiment:
                  results_file_name,
                  models_file_name,
                  learning_rate=0.1,
-                 epoch_patience=100):
+                 epoch_patience=100,
+                 classification=False,
+                 num_classes=None):
         """
 
         :param network: The neural network to perform the experiment
@@ -33,7 +36,7 @@ class Experiment:
         """
         [training_set, validation_set] = partition(dataset)
         self.network = network
-        self.trainer = NetworkTrainer(network, training_set, validation_set, learning_rate)
+        self.trainer = NetworkTrainer(network, training_set, validation_set, learning_rate, classification=classification, num_classes=num_classes)
         self.results_recorder = QueuedCsvWriter(results_file_name, ["epoch", "mse_train", "mse_validation"])
         self.models_recorder = QueuedCsvWriter(models_file_name, ["epoch", "model"], 1)
 
@@ -60,7 +63,7 @@ Starting experiment.
 
 
     def run(self):
-        for [epoch, mse_train, mse_validation] in self.trainer.train_regression_batch():
+        for [epoch, mse_train, mse_validation] in self.trainer.train_batch():
             print("epoch=%d, mse_train=%f, mse_validation=%f" % (epoch, mse_train, mse_validation))
             self.epoch = epoch
             self.mse_train_queue.append(mse_train)

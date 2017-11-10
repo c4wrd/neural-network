@@ -18,6 +18,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     dataset = Datasets.random_rosenbrock(args.num_inputs, args.num_points)
+    #dataset = Datasets.seeds()
     network = MLFFNetwork(args.num_inputs, args.num_hidden_layers, args.num_nodes_layer)
     experiment = Experiment(network, dataset, args.results, args.models)
 
@@ -28,7 +29,7 @@ if __name__ == "__main__":
 
     signal.signal(signal.SIGTERM, on_exit)
 
-    try:
-        experiment.run()
-    except:
-        experiment.exit_handler()
+    #try:
+    experiment.run()
+    #except Exception as e:
+    #    experiment.exit_handler()
