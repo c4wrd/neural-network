@@ -39,7 +39,7 @@ class Datasets:
         data = []
         xvals = np.random.uniform(low, high, num_points)
         for val in xvals:
-            data.append([val, 2*val + 5])
+            data.append([[val], [2*val + 5]])
         return data
             
     @staticmethod
@@ -69,9 +69,14 @@ class Datasets:
         data = []
         for row in writer:
             try:
-                result = [float(val) for val in row[:-1] if len(val.strip()) > 0]
-                result.append(int(row[-1]) - 1)
-                data.append(result)
+                inputs = [float(val) for val in row[:-1] if len(val.strip()) > 0]
+                expected_class = int(row[-1]) - 1
+                expected_outputs = [0, 0, 0]
+                expected_outputs[expected_class] = 1
+                data.append([inputs, expected_outputs])
             except:
                 print(row)
+        random.shuffle(data)
         return data
+
+Datasets.seeds()
