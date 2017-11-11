@@ -90,6 +90,23 @@ class ArtificialNeuralNetwork:
             inputs = outputs # set the inputs to the outputs of the layer
         return inputs
 
+    def predict(self, inputs, classification=False):
+        """
+        Similar to forward, but for multiple data points.
+        :param inputs: the input rows
+        :param classification Whether or not this is a classification and the
+        class should be returned instead of a value
+        :return:
+        """
+        results = []
+        for row in inputs:
+            outputs = self.forward(row)
+            if classification:
+                results.append(np.argmax(outputs))
+            else:
+                results.append(outputs[0])
+        return results
+
     def train(self, *args):
         raise NotImplementedError()
 

@@ -21,6 +21,12 @@ def tanh(value):
 def tanh_deriv(value):
     return 1 - value**2
 
+def relu(value):
+    return max(0, value)
+
+def relu_deriv(value):
+    return 0 if value <= 0 else 1
+
 TRANSFER_FUNCTIONS = {
     "logistic": {
         FUNCTION: logistic,
@@ -33,5 +39,9 @@ TRANSFER_FUNCTIONS = {
     "tanh": {
         FUNCTION: tanh,
         DERIVATIVE: tanh_deriv
+    },
+    "relu": {
+        FUNCTION: relu,
+        DERIVATIVE: relu_deriv
     }
 }
