@@ -13,8 +13,7 @@ class GATrainer(EvolutionStrategy):
                 output_transfer="logistic",
                 crossover_rate: float = 0.4,
                 mutation_rate: float = 0.1,
-                tournament_size: int = 3,
-                patience: int = 25):
+                tournament_size: int = 3):
         self.population = []
         self.population_fitness = {}
         self.pop_size = pop_size
@@ -23,7 +22,6 @@ class GATrainer(EvolutionStrategy):
         self.network_shape = network_shape
         self.output_transfer = output_transfer
         self.tournament_size = tournament_size
-        self.patience = patience
         self.data = data
         self.data_size = len(data)
         self.__init_population__()
@@ -46,7 +44,7 @@ class GATrainer(EvolutionStrategy):
     def select_parent(self):
         candidates = [random.choice(self.population) for i in range(self.tournament_size)]
         return max(candidates, key=lambda candidate: self.population_fitness[candidate])
-    
+
     def calculate_fitness(self, individual):
         """
         Calculates the fitness as a negative
@@ -59,7 +57,20 @@ class GATrainer(EvolutionStrategy):
             outputs = individual.forward(inputs)
             for i in range(len(outputs)):
                 sum_error += (expected[i] - outputs[i])**2
-        return -(sum_error / self.data_size)
+        return -(sum_error / 2)
+        #return self.calculate_classification_accuracy(individual)
+
+    def calculate_classification_accuracy(self, individual):
+        correct = 0
+        for row in self.data:
+            inputs = row[0]
+            expected = row[1]
+            prediction = individual.forward(inputs)
+            predicted_class = prediction.index(max(prediction))
+            if expected[predicted_class] == 1:
+                correct += 1
+        return correct / self.data_size
+
 
     def get_fittest_individual(self):
         # returns the fittest network
@@ -70,7 +81,7 @@ class GATrainer(EvolutionStrategy):
         while len(child_population) <= self.pop_size:
             p1 = self.select_parent()
             p2 = self.select_parent()
-            c1, c2 = self.arithmetic_crossover(p1, p2)
+            c1, c2 = self.single_point_crossover(p1, p2)
             self.mutate(c1)
             self.mutate(c2)
             self.population_fitness[c1] = self.calculate_fitness(c1)
@@ -121,10 +132,10 @@ class GATrainer(EvolutionStrategy):
                 for weight_index in range(num_weights):
                     if current_index == crossover_point:
                         c1.layers[layer_index][neuron_index].set_weight(weight_index, p1_weights[weight_index])
-                        c2.layers[layer_index][neuron_index].set_wieght(weight_index, p2_weights[weight_index])
+                        c2.layers[layer_index][neuron_index].set_weight(weight_index, p2_weights[weight_index])
                     else:
                         c1.layers[layer_index][neuron_index].set_weight(weight_index, p2_weights[weight_index])
-                        c2.layers[layer_index][neuron_index].set_wieght(weight_index, p1_weights[weight_index])
+                        c2.layers[layer_index][neuron_index].set_weight(weight_index, p1_weights[weight_index])
                     current_index += 1
 
         return (c1, c2)
@@ -174,3 +185,20 @@ class GATrainer(EvolutionStrategy):
                     if should_mutate:
                         weight = weights[wi]
                         neuron.set_weight(wi, weight + random.uniform(-0.1, 0.1))
+
+
+from dataset import Datasets
+shape = NetworkShape(7, 2, 15, 3)
+trainer = GATrainer(shape, 6, Datasets.seeds(), crossover_rate=0.4, mutation_rate=0.01, tournament_size=3)
+
+start = trainer.calculate_classification_accuracy(trainer.get_fittest_individual())
+
+try:
+    for i in range(10000):
+        print(trainer.run_generation())
+except:
+    pass
+
+end = trainer.calculate_classification_accuracy(trainer.get_fittest_individual())
+
+print("Started with %.9f, ended with %.9f" % ( start, end ))
