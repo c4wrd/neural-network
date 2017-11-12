@@ -114,10 +114,24 @@ class Datasets:
         random.shuffle(data)
         return Dataset(data, DatasetType.CLASSIFICATION, 7, 3)
 
+    @staticmethod
+    def glass():
+        f = open("dataset_files/glass.txt", 'r')
+        data = []
+        for line in f:
+            inputs = line.split(',')
+            inputs = inputs[1:]
+            expected = int(inputs[-1])-1
+            inputs = [float(val.strip()) for val in inputs[:9]]
+            data.append([inputs,expected])
+        return Dataset(data, DatasetType.CLASSIFICATION, 9, 7)
+
+
 class DatasetLoader:
 
     DATASETS = {
-        "seeds": Datasets.seeds
+        "seeds": Datasets.seeds,
+        "glass": Datasets.glass
     }
 
     @classmethod
@@ -128,3 +142,6 @@ class DatasetLoader:
         if dataset_name not in DatasetLoader.DATASETS:
             raise Exception("Dataset '%s' was not found" % dataset_name)
         return DatasetLoader.DATASETS[dataset_name]()
+
+x = Datasets.glass()
+print(x.dataset)
