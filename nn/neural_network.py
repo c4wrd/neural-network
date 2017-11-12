@@ -31,6 +31,8 @@ class Neuron:
         return self.transfer(self.activate(inputs))
 
     def activate(self, inputs):
+        #print("WEIGHTS: " + str(self.weights) + "\nINPUTS: " + str(inputs))
+        #print("DOT: " + str(np.dot(self.weights, inputs) + self.bias))
         return np.dot(self.weights, inputs) + self.bias
 
     def transfer(self, activation):
