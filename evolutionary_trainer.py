@@ -4,7 +4,6 @@ import sys
 
 from dataset import Datasets, DatasetLoader, DatasetType
 from nn.ga import GATrainer
-from nn.mlff import *
 from experiment import *
 from nn.neural_network import NetworkShape
 
