@@ -1,13 +1,12 @@
 import json
-import numpy as np
-import random
 from collections import deque
 
-from dataset import Dataset
+from dataset import Dataset, DatasetType
 from nn.evolution import EvolutionaryStrategy
 from nn.neural_network import ArtificialNeuralNetwork
 from nn.trainer import NetworkTrainer
 from util import QueuedCsvWriter
+from sklearn.metrics import classification_report
 
 
 class Experiment:
@@ -70,11 +69,13 @@ Starting experiment.
         # to stop the training process
         conditions = [
             self.err_not_changing(self.mse_validation_queue),
-            self.err_not_changing(self.mse_train_queue)
-        ]   #  self.average_validation_err_increasing()
+            self.err_not_changing(self.mse_train_queue),
+            self.average_validation_err_increasing() # TODO determine if we want this or not
+        ]
         return any(conditions)
 
     def err_not_changing(self, err_queue: deque):
+        # TODO verify this is working as expected
         if len(err_queue) == self.epoch_patience:
             # a set cannot contain duplicates
             # so if the length is 1, then we have
@@ -189,14 +190,35 @@ class EvolutionaryExperiment(Experiment):
             self.mse_validation_queue.append(validation_fitness)
 
             self.results_recorder.writerow([str(generation), "%f" % train_fitness, "%f" % validation_fitness])
+
+            # save our model progress over time
             if generation % 50 == 0:
                 self.save_model(generation)
+
+            # print statistics over time
+            if generation % 100 == 0:
+                self.print_stats()
 
             if self.should_stop_training():
                 print("=== Training was completed. ===")
                 break
 
+        self.print_stats()
+
     def save_model(self, epoch):
         model = self.trainer.get_fittest_individual().json()
         model_serialized = json.dumps(model)
         self.models_recorder.writerow([str(epoch), model_serialized])
+
+    def print_stats(self):
+        if self.dataset.type == DatasetType.CLASSIFICATION:
+            # print a classification report on the accuracy
+            X, Y = self.dataset.X, self.dataset.CLASS_Y
+            network = self.trainer.get_fittest_individual()
+            predicted_y = network.predict(X, True)
+            print(classification_report(Y, predicted_y))
+
+
+    def exit_handler(self):
+        self.print_stats()
+        super().exit_handler()

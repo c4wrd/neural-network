@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     signal.signal(signal.SIGTERM, on_exit)
 
-    #try:
-    experiment.run()
-    #except Exception as e:
-    #    experiment.exit_handler()
+    try:
+        experiment.run()
+    except:
+        experiment.exit_handler()

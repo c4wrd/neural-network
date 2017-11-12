@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3431f957-0c2e-451a-af10-689da381adc7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/evolutionary_trainer.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/mlff_experiment.py" afterPath="$PROJECT_DIR$/backprop_experiment.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dataset.py" afterPath="$PROJECT_DIR$/dataset.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/evolutionary_trainer.py" afterPath="$PROJECT_DIR$/evolutionary_trainer.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/experiment.py" afterPath="$PROJECT_DIR$/experiment.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn/evolution.py" afterPath="$PROJECT_DIR$/nn/evolution.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn/ga.py" afterPath="$PROJECT_DIR$/nn/ga.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn/neural_network.py" afterPath="$PROJECT_DIR$/nn/neural_network.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn/trainer.py" afterPath="$PROJECT_DIR$/nn/trainer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn/transfer.py" afterPath="$PROJECT_DIR$/nn/transfer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/util.py" afterPath="$PROJECT_DIR$/util.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -65,8 +57,8 @@
       <file leaf-file-name="evolutionary_trainer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evolutionary_trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1280">
-              <caret line="41" column="24" lean-forward="true" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
+            <state relative-caret-position="1240">
+              <caret line="31" column="20" lean-forward="true" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -99,11 +91,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="experiment.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ga.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/nn/ga.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="427">
+              <caret line="20" column="41" lean-forward="false" selection-start-line="20" selection-start-column="41" selection-end-line="20" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="experiment.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1475">
-              <caret line="199" column="53" lean-forward="false" selection-start-line="199" selection-start-column="53" selection-end-line="199" selection-end-column="53" />
+            <state relative-caret-position="-4485">
+              <caret line="72" column="92" lean-forward="false" selection-start-line="72" selection-start-column="92" selection-end-line="72" selection-end-column="92" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -114,22 +116,10 @@
       <file leaf-file-name="mlff.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nn/mlff.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
+            <state relative-caret-position="-2743">
               <caret line="22" column="60" lean-forward="false" selection-start-line="22" selection-start-column="53" selection-end-line="22" selection-end-column="60" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="neural_network.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nn/neural_network.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-326">
-              <caret line="107" column="22" lean-forward="false" selection-start-line="107" selection-start-column="22" selection-end-line="107" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -146,8 +136,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>momentU</find>
-      <find>momen</find>
       <find>momentum_factor</find>
       <find>linear</find>
       <find>max(`</find>
@@ -170,12 +158,14 @@
       <find>crossover_rate</find>
       <find>single_point</find>
       <find>MLFFNet</find>
-      <find>forward</find>
       <find>self.pool</find>
       <find>self.epoch</find>
       <find>self.data_size</find>
       <find>calculate_classification_accuracy</find>
       <find>self.data</find>
+      <find>forward</find>
+      <find>err_not_changing</find>
+      <find>mutation_rate</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -207,9 +197,9 @@
         <option value="$PROJECT_DIR$/dataset.py" />
         <option value="$PROJECT_DIR$/nn/evolution.py" />
         <option value="$PROJECT_DIR$/backprop_experiment.py" />
-        <option value="$PROJECT_DIR$/nn/ga.py" />
         <option value="$PROJECT_DIR$/evolutionary_trainer.py" />
         <option value="$PROJECT_DIR$/experiment.py" />
+        <option value="$PROJECT_DIR$/nn/ga.py" />
       </list>
     </option>
   </component>
@@ -436,7 +426,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="153" />
+      <option name="time" value="154" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -724,32 +714,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nn/neural_network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-326">
-          <caret line="107" column="22" lean-forward="false" selection-start-line="107" selection-start-column="22" selection-end-line="107" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dataset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="354">
           <caret line="114" column="58" lean-forward="true" selection-start-line="114" selection-start-column="58" selection-end-line="114" selection-end-column="58" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nn/mlff.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="22" column="60" lean-forward="false" selection-start-line="22" selection-start-column="53" selection-end-line="22" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -768,14 +738,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40">
           <caret line="73" column="8" lean-forward="false" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nn/ga.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3760">
-          <caret line="103" column="14" lean-forward="true" selection-start-line="103" selection-start-column="14" selection-end-line="103" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -801,23 +763,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/evolutionary_trainer.py">
+    <entry file="file://$PROJECT_DIR$/nn/neural_network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1280">
-          <caret line="41" column="24" lean-forward="true" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
+        <state relative-caret-position="623">
+          <caret line="92" column="8" lean-forward="false" selection-start-line="92" selection-start-column="8" selection-end-line="92" selection-end-column="8" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nn/mlff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2743">
+          <caret line="22" column="60" lean-forward="false" selection-start-line="22" selection-start-column="53" selection-end-line="22" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/experiment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1475">
-          <caret line="199" column="53" lean-forward="false" selection-start-line="199" selection-start-column="53" selection-end-line="199" selection-end-column="53" />
+        <state relative-caret-position="-4485">
+          <caret line="72" column="92" lean-forward="false" selection-start-line="72" selection-start-column="92" selection-end-line="72" selection-end-column="92" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/evolutionary_trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1240">
+          <caret line="31" column="20" lean-forward="true" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nn/ga.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="20" column="41" lean-forward="false" selection-start-line="20" selection-start-column="41" selection-end-line="20" selection-end-column="41" />
+          <folding />
         </state>
       </provider>
     </entry>
