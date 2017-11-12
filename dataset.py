@@ -20,6 +20,7 @@ class DatasetType:
 class Dataset:
 
     def __init__(self, dataset, type, num_inputs, num_outputs):
+        random.shuffle(dataset)
         self.dataset = dataset
         self.size = len(dataset)
         self.type = type
@@ -111,7 +112,6 @@ class Datasets:
                 data.append([inputs, expected_outputs])
             except:
                 print(row)
-        random.shuffle(data)
         return Dataset(data, DatasetType.CLASSIFICATION, 7, 3)
 
 class DatasetLoader:
