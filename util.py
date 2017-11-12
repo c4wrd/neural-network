@@ -71,8 +71,8 @@ class KFoldCrossValidation:
 def mean_squared_error(dataset, network: ArtificialNeuralNetwork):
     sum_error = 0
     for row in dataset:
-        inputs = row[:-1]
-        expected = row[-1]
+        inputs = row[0]
+        expected = row[1]
         if not isinstance(expected, list):
             expected = [expected]
         outputs = network.forward(inputs)

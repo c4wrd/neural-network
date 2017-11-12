@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import csv
+import math
 
 def rosenbrock(*x):
     x_total = len(x)
@@ -10,6 +11,40 @@ def rosenbrock(*x):
         rhs = 100*(x[i+1] - x[i]**2)**2
         sum += lhs + rhs
     return sum
+
+class DatasetType:
+
+    CLASSIFICATION = "classification"
+    REGRESSION = "regression"
+
+class Dataset:
+
+    def __init__(self, dataset, type, num_inputs, num_outputs):
+        self.dataset = dataset
+        self.size = len(dataset)
+        self.type = type
+        self.num_inputs = num_inputs
+        self.num_outputs = num_outputs
+        self.X, self.Y = zip(*[(row[0], row[1]) for row in dataset])
+        if type == DatasetType.CLASSIFICATION:
+            self.CLASS_Y = [np.argmax(row) for row in self.Y]
+
+    def get_train(self, portion=0.7):
+        train_split = math.ceil(portion * self.size)
+        return self.dataset[:train_split]
+
+    def get_validation(self, portion=0.3):
+        test_split = math.floor((1.0-portion)*self.size)
+        return self.dataset[test_split:]
+
+    def get_features(self, point):
+        return self.X[point]
+
+    def get_expected_output(self, point):
+        return self.Y[point]
+
+    def get_expected_class(self, point):
+        return self.CLASS_Y[point]
 
 class Datasets:
 
@@ -77,21 +112,19 @@ class Datasets:
             except:
                 print(row)
         random.shuffle(data)
-        return data
+        return Dataset(data, DatasetType.CLASSIFICATION, 7, 3)
 
-    @staticmethod
-    def appliances():
-        COUNT = 500 # specify subset length
-        data = []
-        f = open("dataset_files/energydata_complete.csv")
-        for line in f:
-            COUNT-=1
-            line = line.replace('\"','')
-            line = line.split(',')
-            expected = [int(line[1]) + int(line[2])]
-            inputs = [float(val) for val in line[3:]]
-            data.append([inputs,expected])
-            if COUNT == 0: break
-        return data
+class DatasetLoader:
 
-Datasets.seeds()
+    DATASETS = {
+        "seeds": Datasets.seeds
+    }
+
+    @classmethod
+    def load(self, dataset_name) -> Dataset:
+        """
+        Returns a specified dataset by name
+        """
+        if dataset_name not in DatasetLoader.DATASETS:
+            raise Exception("Dataset '%s' was not found" % dataset_name)
+        return DatasetLoader.DATASETS[dataset_name]()

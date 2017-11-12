@@ -57,8 +57,8 @@ class NetworkTrainer:
         for epoch in range(start_epoch, start_epoch + max_epochs):
             sum_error = 0
             for row in self.training_set:
-                inputs = row[:-1]
-                expected = row[-1]
+                inputs = row[0]
+                expected = row[1]
                 if not isinstance(expected, list):
                     expected = [expected]
                 outputs = self.network.train(inputs, expected)
@@ -95,8 +95,8 @@ class NetworkTrainer:
             for batch in batches:
                 batch_dweights = []  # array of weight changes for data points in this batch
                 for row in batch:
-                    inputs = row[:-1]
-                    expected = row[-1]
+                    inputs = row[0]
+                    expected = row[1]
                     if not isinstance(expected, list):
                         expected = [expected]
                     [outputs, dweights] = self.network.train_without_update(inputs, expected)  # calculate the outputs

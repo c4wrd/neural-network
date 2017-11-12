@@ -1,20 +1,26 @@
 import random
 
-from nn.evolution import EvolutionStrategy
+from functools import partial
+
+from multiprocessing import Pool
+
+from dataset import Dataset
+from nn.evolution import EvolutionaryStrategy, squared_error, classification_accuracy, FitnessFunctions
 from nn.mlff import MLFFNetwork
 from nn.neural_network import NetworkShape
 
-class GATrainer(EvolutionStrategy):
+class GATrainer(EvolutionaryStrategy):
 
     def __init__(self, 
                 network_shape: NetworkShape,
                 pop_size: int,
-                data,
+                dataset: Dataset,
                 output_transfer="logistic",
+                hidden_transfer="logistic",
                 crossover_rate: float = 0.4,
                 mutation_rate: float = 0.1,
                 tournament_size: int = 3,
-                patience: int = 25):
+                fitness_function = FitnessFunctions.squared_error):
         self.population = []
         self.population_fitness = {}
         self.pop_size = pop_size
@@ -22,16 +28,19 @@ class GATrainer(EvolutionStrategy):
         self.mutation_rate = mutation_rate
         self.network_shape = network_shape
         self.output_transfer = output_transfer
+        self.hidden_transfer = hidden_transfer
         self.tournament_size = tournament_size
-        self.patience = patience
-        self.data = data
-        self.data_size = len(data)
+        self.dataset = dataset
+        self.train_data = dataset.get_train()
+        self.test_data = dataset.get_validation()
+        self.pool = Pool()
+        self.fitness_function = fitness_function
         self.__init_population__()
     
     def __init_population__(self):
         for i in range(self.pop_size):
             network = self.create_individual()
-            self.population_fitness[network] = self.calculate_fitness(network)
+            self.update_fitness(network)
             self.population.append(network)
 
     def create_individual(self):
@@ -40,26 +49,42 @@ class GATrainer(EvolutionStrategy):
             num_hidden_layers=self.network_shape.num_hidden_layers,
             num_nodes_layer=self.network_shape.num_hidden_nodes,
             num_outputs=self.network_shape.num_outputs,
-            output_transfer=self.output_transfer
+            output_transfer=self.output_transfer,
+            hidden_transfer=self.hidden_transfer
         )
 
     def select_parent(self):
         candidates = [random.choice(self.population) for i in range(self.tournament_size)]
         return max(candidates, key=lambda candidate: self.population_fitness[candidate])
-    
-    def calculate_fitness(self, individual):
+
+    def update_fitness(self, individual, population_fitness=None):
         """
-        Calculates the fitness as a negative
-        mean squared error
+        Updates the fitness of the individual. If population_fitness is none,
+        it updates the population fitness in this self instance.
+        :param individual: individual to evaluate
+        :param population_fitness: dictionary to store the fitness, if
+            computing in parallel
+        :return:
         """
-        sum_error = 0
-        for x in self.data:
-            inputs = x[0]
-            expected = x[1]
-            outputs = individual.forward(inputs)
-            for i in range(len(outputs)):
-                sum_error += (expected[i] - outputs[i])**2
-        return -(sum_error / self.data_size)
+        fitness = self.fitness_function(self.train_data, individual)
+        if population_fitness is None:
+            self.population_fitness[individual] = fitness
+        else:
+            population_fitness[individual] = fitness
+        return fitness
+
+    """
+    def calculate_classification_accuracy(self, individual):
+        correct = 0
+        for row in self.train_data:
+            inputs = row[0]
+            expected = row[1]
+            prediction = individual.forward(inputs)
+            predicted_class = prediction.index(max(prediction))
+            if expected[predicted_class] == 1:
+                correct += 1
+        return correct
+    """
 
     def get_fittest_individual(self):
         # returns the fittest network
@@ -70,12 +95,16 @@ class GATrainer(EvolutionStrategy):
         while len(child_population) <= self.pop_size:
             p1 = self.select_parent()
             p2 = self.select_parent()
-            c1, c2 = self.arithmetic_crossover(p1, p2)
+            c1, c2 = self.single_point_crossover(p1, p2)
             self.mutate(c1)
             self.mutate(c2)
-            self.population_fitness[c1] = self.calculate_fitness(c1)
-            self.population_fitness[c2] = self.calculate_fitness(c2)
             child_population.extend([c1, c2])
+
+        # compute the fitness of each of the children in parallel
+        fitness_fn = partial(self.fitness_function, self.train_data)
+        fitness_results = self.pool.map(fitness_fn, child_population)
+        for individual, fitness in zip(child_population, fitness_results):
+            self.population_fitness[individual] = fitness
         
         # sort individuals by their fitness
         all_individuals = sorted(self.population_fitness.items(), key=lambda tuple: tuple[1])
@@ -89,7 +118,10 @@ class GATrainer(EvolutionStrategy):
 
         # set population to new population
         self.population = [individual for individual, fitness in new_population]
-        return min_fitness
+
+        validation_fitness = self.fitness_function(self.test_data, self.get_fittest_individual())
+
+        return min_fitness, validation_fitness
 
     def single_point_crossover(self, p1: MLFFNetwork, p2: MLFFNetwork):
         c1 = self.create_individual()
@@ -121,10 +153,10 @@ class GATrainer(EvolutionStrategy):
                 for weight_index in range(num_weights):
                     if current_index == crossover_point:
                         c1.layers[layer_index][neuron_index].set_weight(weight_index, p1_weights[weight_index])
-                        c2.layers[layer_index][neuron_index].set_wieght(weight_index, p2_weights[weight_index])
+                        c2.layers[layer_index][neuron_index].set_weight(weight_index, p2_weights[weight_index])
                     else:
                         c1.layers[layer_index][neuron_index].set_weight(weight_index, p2_weights[weight_index])
-                        c2.layers[layer_index][neuron_index].set_wieght(weight_index, p1_weights[weight_index])
+                        c2.layers[layer_index][neuron_index].set_weight(weight_index, p1_weights[weight_index])
                     current_index += 1
 
         return (c1, c2)
@@ -174,3 +206,27 @@ class GATrainer(EvolutionStrategy):
                     if should_mutate:
                         weight = weights[wi]
                         neuron.set_weight(wi, weight + random.uniform(-0.1, 0.1))
+
+
+# from dataset import Datasets
+# shape = NetworkShape(1, 2, 10, 1)
+# trainer = GATrainer(shape,
+#                     15,
+#                     Datasets.linear(),
+#                     output_transfer="linear",
+#                     crossover_rate=0.6,
+#                     mutation_rate=0.1,
+#                     tournament_size=4,
+#                     pool_size=4)
+#
+# #start = trainer.calculate_classification_accuracy(trainer.get_fittest_individual())
+#
+# try:
+#     for i in range(1000000):
+#         print("%d: %.6f" % ( i, trainer.run_generation()))
+# except:
+#     pass
+#
+# #end = trainer.calculate_classification_accuracy(trainer.get_fittest_individual())
+#
+# print("Started with %.9f, ended with %.9f" % ( start, end ))

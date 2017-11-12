@@ -1,29 +1,20 @@
 import json
-import numpy as np
-import random
 from collections import deque
+
+from dataset import Dataset, DatasetType
+from nn.evolution import EvolutionaryStrategy
 from nn.neural_network import ArtificialNeuralNetwork
 from nn.trainer import NetworkTrainer
 from util import QueuedCsvWriter
+from sklearn.metrics import classification_report
 
-def partition(dataset):
-    """
-    Returns a 70/30 split of the dataset
-    """
-    random.shuffle(dataset)
-    train_index = int(0.7*len(dataset))
-    return [dataset[:train_index], dataset[train_index:]]
 
 class Experiment:
 
-    def __init__(self, network: ArtificialNeuralNetwork,
-                 dataset,
+    def __init__(self,
                  results_file_name,
                  models_file_name,
-                 learning_rate=0.1,
-                 epoch_patience=100,
-                 classification=False,
-                 num_classes=None):
+                 epoch_patience=100):
         """
 
         :param network: The neural network to perform the experiment
@@ -34,9 +25,6 @@ class Experiment:
         :param epoch_patience: Number of epochs for which if the error
             doesn't change, assume we are in a minimum and stop training.
         """
-        [training_set, validation_set] = partition(dataset)
-        self.network = network
-        self.trainer = NetworkTrainer(network, training_set, validation_set, learning_rate, classification=classification, num_classes=num_classes)
         self.results_recorder = QueuedCsvWriter(results_file_name, ["epoch", "mse_train", "mse_validation"])
         self.models_recorder = QueuedCsvWriter(models_file_name, ["epoch", "model"], 1)
 
@@ -50,37 +38,27 @@ class Experiment:
             """\
 =====
 Starting experiment.
-    learning_rate : {learning_rate}
-    |D|           : {size}
     epoch_patience: {patience}
     results_file  : {results}
     models_file   : {models}
 =====
-            """.format(learning_rate=learning_rate, size=len(dataset),
-                       patience=epoch_patience, results=results_file_name,
+            """.format(patience=epoch_patience,
+                       results=results_file_name,
                        models=models_file_name)
         )
 
 
     def run(self):
-        for [epoch, mse_train, mse_validation] in self.trainer.train_batch():
-            print("epoch=%d, mse_train=%f, mse_validation=%f" % (epoch, mse_train, mse_validation))
-            self.epoch = epoch
-            self.mse_train_queue.append(mse_train)
-            self.mse_validation_queue.append(mse_validation)
-
-            self.results_recorder.writerow([str(epoch), "%f" % mse_train, "%f" % mse_validation])
-            if epoch % 50 == 0:
-                self.save_model(epoch)
-
-            if self.should_stop_training():
-                print("=== Training was completed. ===")
-                self.trainer.stop()
+        """
+        Needs to be implemeneted by subclass
+        """
+        raise NotImplementedError()
 
     def save_model(self, epoch):
-        model = self.network.json()
-        model_serialized = json.dumps(model)
-        self.models_recorder.writerow([str(epoch), model_serialized])
+        """
+        Needs to be implemeneted by subclass
+        """
+        raise NotImplementedError()
 
     def should_stop_training(self):
         """
@@ -91,11 +69,13 @@ Starting experiment.
         # to stop the training process
         conditions = [
             self.err_not_changing(self.mse_validation_queue),
-            self.err_not_changing(self.mse_train_queue)
-        ]   #  self.average_validation_err_increasing()
+            self.err_not_changing(self.mse_train_queue),
+            self.average_validation_err_increasing() # TODO determine if we want this or not
+        ]
         return any(conditions)
 
     def err_not_changing(self, err_queue: deque):
+        # TODO verify this is working as expected
         if len(err_queue) == self.epoch_patience:
             # a set cannot contain duplicates
             # so if the length is 1, then we have
@@ -137,3 +117,108 @@ Starting experiment.
         self.results_recorder.flush()
         print("Exited prematurely...")
 
+
+
+class BackpropExperiment(Experiment):
+
+    def __init__(self,
+                 network: ArtificialNeuralNetwork,
+                 dataset: Dataset,
+                 results_file_name,
+                 models_file_name,
+                 learning_rate=0.1,
+                 epoch_patience=100,
+                 classification=False,
+                 num_classes=None):
+        """
+
+        :param network: The neural network to perform the experiment
+        :param dataset: The dataset to train on
+        :param results_file_name: The results file name
+        :param models_file_name: The models file name
+        :param learning_rate: Learning rate of the model
+        :param epoch_patience: Number of epochs for which if the error
+            doesn't change, assume we are in a minimum and stop training.
+        """
+        super().__init__(results_file_name, models_file_name, epoch_patience)
+        training_set = dataset.get_train()
+        validation_set = dataset.get_validation()
+        self.network = network
+        self.trainer = NetworkTrainer(network, training_set, validation_set, learning_rate, classification=classification, num_classes=num_classes)
+
+    def run(self):
+        for [epoch, mse_train, mse_validation] in self.trainer.train_batch():
+            print("epoch=%d, mse_train=%f, mse_validation=%f" % (epoch, mse_train, mse_validation))
+            self.epoch = epoch
+            self.mse_train_queue.append(mse_train)
+            self.mse_validation_queue.append(mse_validation)
+
+            self.results_recorder.writerow([str(epoch), "%f" % mse_train, "%f" % mse_validation])
+            if epoch % 50 == 0:
+                self.save_model(epoch)
+
+            if self.should_stop_training():
+                print("=== Training was completed. ===")
+                self.trainer.stop()
+
+    def save_model(self, epoch):
+        model = self.network.json()
+        model_serialized = json.dumps(model)
+        self.models_recorder.writerow([str(epoch), model_serialized])
+
+class EvolutionaryExperiment(Experiment):
+
+    def __init__(self,
+                 trainer: EvolutionaryStrategy,
+                 dataset: Dataset,
+                 results_file_name,
+                 models_file_name,
+                 max_generations=10000
+    ):
+        super().__init__(results_file_name, models_file_name)
+        self.trainer = trainer
+        self.dataset = dataset
+        self.max_generations = max_generations
+
+    def run(self):
+
+        for generation in range(self.max_generations):
+            self.epoch = generation
+            [train_fitness, validation_fitness] = self.trainer.run_generation()
+            print("generation=%d, train_fitness=%f, valid_fitness=%f" % (generation, train_fitness, validation_fitness))
+            self.mse_train_queue.append(train_fitness)
+            self.mse_validation_queue.append(validation_fitness)
+
+            self.results_recorder.writerow([str(generation), "%f" % train_fitness, "%f" % validation_fitness])
+
+            # save our model progress over time
+            if generation % 50 == 0:
+                self.save_model(generation)
+
+            # print statistics over time
+            if generation % 100 == 0:
+                self.print_stats()
+
+            if self.should_stop_training():
+                print("=== Training was completed. ===")
+                break
+
+        self.print_stats()
+
+    def save_model(self, epoch):
+        model = self.trainer.get_fittest_individual().json()
+        model_serialized = json.dumps(model)
+        self.models_recorder.writerow([str(epoch), model_serialized])
+
+    def print_stats(self):
+        if self.dataset.type == DatasetType.CLASSIFICATION:
+            # print a classification report on the accuracy
+            X, Y = self.dataset.X, self.dataset.CLASS_Y
+            network = self.trainer.get_fittest_individual()
+            predicted_y = network.predict(X, True)
+            print(classification_report(Y, predicted_y))
+
+
+    def exit_handler(self):
+        self.print_stats()
+        super().exit_handler()
