@@ -142,6 +142,3 @@ class DatasetLoader:
         if dataset_name not in DatasetLoader.DATASETS:
             raise Exception("Dataset '%s' was not found" % dataset_name)
         return DatasetLoader.DATASETS[dataset_name]()
-
-x = Datasets.glass()
-print(x.dataset)
