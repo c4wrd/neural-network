@@ -1,10 +1,10 @@
 import random
 from nn.neural_network import NetworkShape
-from nn.evolution import EvolutionStrategy
+from nn.evolution import EvolutionaryStrategy
 from nn.mlff import MLFFNetwork
 
 
-class DETrainer(EvolutionStrategy):
+class DETrainer(EvolutionaryStrategy):
     def __init__(self, ps, pop_s, alpha, beta, data: [[[],[]]]):
         self.population_size = ps
         self.pop_s = pop_s
@@ -32,39 +32,21 @@ class DETrainer(EvolutionStrategy):
                 xw1 = xn1.get_weights()
                 xw2 = xn2.get_weights()
                 xw3 = xn3.get_weights()
-                #print('\n\n')
-                #print(str(xw1) + '\n' + str(xw2) + '\n' + str(xw3) + '\n' +str(pw))
                 for index in range(len(xw1)):
                     u_val = xw1[index] + self.beta*(xw2[index] - xw3[index])
                     if random.random() < self.alpha:
                         un.set_weight(index, pw[index])
                     else:
                         un.set_weight(index, u_val)
-                        #un.set_weight(index, self.alpha*pw[index] + (1-self.alpha)*u_val)
         return u
-
-    def fitness_class(self, p: MLFFNetwork, u: MLFFNetwork):
-        input, expected = zip(*[(row[0],row[1]) for row in self.data])
-        correct_u = 0
-        correct_p = 0
-        for val,exp in zip(input,expected):
-            actual_p = p.forward(val)
-            actual_u = u.forward(val)
-            if self.big3(actual_p) == self.big3(exp):
-                correct_p+=1
-            if self.big3(actual_u) == self.big3(exp):
-                correct_u+=1
-        return (p, correct_p) if correct_p > correct_u else (u, correct_u)
 
     def fitness(self, p: MLFFNetwork, u: MLFFNetwork):
         input, expected = zip(*[(row[0],row[1]) for row in self.data])
         error_u = 0
         error_p = 0
         for val,exp in zip(input,expected):
-            #print("VAL " + str(val))
             actual_p = p.forward(val)
             actual_u = u.forward(val)
-            #print("ACTUAL P" + str(actual_p) + "\t ACTUAL U" + str(actual_u))
             for a,e in zip(actual_p,exp):
                 error_p += (e-a)**2
             for a,e in zip(actual_u,exp):
@@ -113,47 +95,6 @@ class DETrainer(EvolutionStrategy):
 
     def get_fittest_individual(self):
         return max(self.population_fitness.items(), key=lambda pair: pair[1])
-
-from dataset import Datasets
-
-if False:   # runs seeds
-    shape = NetworkShape(7,1,3,3)
-    trainer = DETrainer(10, shape, .8, .5, Datasets.seeds())
-    for i in range(5000):
-        trainer.run_generation()
-        print(str(trainer.get_fittest_individual()))
-    data = Datasets.seeds()
-    input, expected = zip(*[(row[0], row[1]) for row in data])
-    indiv = trainer.get_fittest_individual()[0]
-    count = 0
-    correct = 0
-    for inp,exp in zip(input,expected):
-        count += 1
-        result = indiv.forward(inp)
-        #print(str(inp))
-        #print("RESULT: " + str(result) + "\tEXPECTED: " + str(exp))
-        if trainer.big3(result) == trainer.big3(exp):
-            print("CORRECT: " + str(result) + "," + str(exp))
-            correct+=1
-        else:
-            print("Wrong: " + str(result) + "," + str(exp))
-    print(str(100 * (correct / count)))
-
-if True:            # runs appliances
-    shape = NetworkShape(26, 1, 30, 1)
-    trainer = DETrainer(30, shape, .8, .5, Datasets.appliances())
-    for i in range(5000):
-        trainer.run_generation()
-        print(str(trainer.get_fittest_individual()))
-    data = Datasets.appliances()
-    input, expected = zip(*[(row[0], row[1]) for row in data])
-    indiv = trainer.get_fittest_individual()[0]
-    count = 0
-    correct = 0
-    for inp,exp in zip(input,expected):
-        count += 1
-        result = indiv.forward(inp)
-        print("RESULT: " + str(result) + "\tEXPECTED: " + str(exp))
 
 
 

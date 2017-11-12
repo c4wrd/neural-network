@@ -126,12 +126,25 @@ class Datasets:
             data.append([inputs,expected])
         return Dataset(data, DatasetType.CLASSIFICATION, 9, 7)
 
+    @staticmethod
+
+    def contraceptive():
+        f = open("dataset_files/contraceptives.txt")
+        data = []
+        for line in f:
+            inputs = line.split(',')
+            expected = int(inputs[-1]) - 1
+            inputs = [float(val.strip()) for val in inputs[:9]]
+            data.append([inputs, expected])
+        return Dataset(data, DatasetType.CLASSIFICATION, 9, 3)
+
 
 class DatasetLoader:
 
     DATASETS = {
         "seeds": Datasets.seeds,
-        "glass": Datasets.glass
+        "glass": Datasets.glass,
+        "contraceptive": Datasets.contraceptives
     }
 
     @classmethod
