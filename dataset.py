@@ -79,4 +79,19 @@ class Datasets:
         random.shuffle(data)
         return data
 
+    @staticmethod
+    def appliances():
+        COUNT = 500 # specify subset length
+        data = []
+        f = open("dataset_files/energydata_complete.csv")
+        for line in f:
+            COUNT-=1
+            line = line.replace('\"','')
+            line = line.split(',')
+            expected = [int(line[1]) + int(line[2])]
+            inputs = [float(val) for val in line[3:]]
+            data.append([inputs,expected])
+            if COUNT == 0: break
+        return data
+
 Datasets.seeds()
