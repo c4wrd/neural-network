@@ -142,13 +142,30 @@ class Datasets:
             data.append([inputs, expected_outputs])
         return Dataset(data, DatasetType.CLASSIFICATION, 9, 3)
 
+    @staticmethod
+    def yeast():
+        f = open("dataset_files/yeast.txt")
+        writer = csv.reader(f.readlines(), delimiter=",")
+        data = []
+        for row in writer:
+            try:
+                inputs = [float(val) for val in row[1:-1] if len(val.strip()) > 0]
+                expected_class = int(row[-1])
+                expected_outputs = [0 for i in range(10)]
+                expected_outputs[expected_class] = 1
+                data.append([inputs, expected_outputs])
+            except:
+                print(row)
+        return Dataset(data, DatasetType.CLASSIFICATION, 8, 10)
+
 
 class DatasetLoader:
 
     DATASETS = {
         "seeds": Datasets.seeds,
         "glass": Datasets.glass,
-        "contraceptive": Datasets.contraceptive
+        "contraceptive": Datasets.contraceptive,
+        "yeast": Datasets.yeast
     }
 
     @classmethod
