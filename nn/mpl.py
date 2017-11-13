@@ -16,7 +16,7 @@ using a (mu + lambda) evolution strategy.
 class MPLTrainer(EvolutionaryStrategy):
 
     def __init__(self,
-                 network_shape: NetworkShape,
+                 shape: NetworkShape,
                  mu_size: int,
                  lambda_size: int,
                  dataset: Dataset,
@@ -32,15 +32,15 @@ class MPLTrainer(EvolutionaryStrategy):
         self.lambda_size = lambda_size
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
-        self.network_shape = network_shape
+        self.network_shape = shape
         self.output_transfer = output_transfer
         self.hidden_transfer = hidden_transfer
         self.tournament_size = tournament_size
         self.dataset = dataset
         self.train_data = dataset.get_train()
         self.test_data = dataset.get_validation()
-        self.pool = Pool()
         self.fitness_function = fitness_function
+        self.pool = Pool()
         self.__init_population__()
     
     def __init_population__(self):
