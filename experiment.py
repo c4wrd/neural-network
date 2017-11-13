@@ -157,8 +157,6 @@ class BackpropExperiment(Experiment):
 
             if epoch % 50 == 0:
                 self.save_model(epoch)
-
-            if epoch % 50 == 0:
                 self.save_stats()
 
             if self.should_stop_training():
@@ -213,15 +211,9 @@ class EvolutionaryExperiment(Experiment):
             self.mse_train_queue.append(round(train_fitness, 6))
             self.mse_validation_queue.append(round(validation_fitness, 6))
 
-            self.results_recorder.writerow([str(generation), "%f" % train_fitness, "%f" % validation_fitness])
-
             # save our model progress over time
             if generation % 50 == 0:
                 self.save_model(generation)
-
-            # print statistics over time
-            if generation % 50 == 0:
-                self.results_recorder.writerow([str(generation), "%f" % train_fitness, "%f" % validation_fitness])
                 self.save_stats()
 
             if self.should_stop_training():
