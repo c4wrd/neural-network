@@ -115,7 +115,7 @@ class GATrainer(EvolutionaryStrategy):
         min_fitness = all_individuals[-1][1]
 
         # pop off our mu individuals that are the fittest
-        new_population = [all_individuals.pop() for i in range(self.mu_size)]
+        new_population = [all_individuals.pop() for i in range(self.pop_size)]
 
         # remove old networks from being tracked
         for individual, fitness in all_individuals:
