@@ -80,16 +80,14 @@ class DETrainer(EvolutionaryStrategy):
                 new_generation_fitness[u] = fitness_u
                 self.population_fitness[u] = fitness_u
                 self.population_fitness.pop(p)
-            else:
-                # add p to our new generation
-                new_generation_fitness[p] = self.population_fitness[p]
 
-        for i in range(int(self.population_size*.75)+1):
-            indiv = self.get_fittest_individual()
-            fitness_indiv = self.population_fitness[indiv]
+        sorted_population = sorted(self.population_fitness.items(), key=lambda pair: pair[1], reverse=True)
+
+        # keep only the top 75%
+        top75 = sorted_population[:int(self.population_size*.75)+1]
+        for indiv, fitness in top75:
             new_population.append(indiv)
-            new_generation_fitness[indiv] = fitness_indiv
-            self.population_fitness.pop(indiv)
+            new_generation_fitness[indiv] = fitness
 
         for i in range(int(self.population_size*.25)):
             new_indev = MLFFNetwork(self.pop_s.num_inputs, self.pop_s.num_hidden_layers, self.pop_s.num_hidden_nodes, self.pop_s.num_outputs)
@@ -97,13 +95,12 @@ class DETrainer(EvolutionaryStrategy):
             new_population.append(new_indev)
             new_generation_fitness[new_indev] = new_indiv_fitness
 
-        train_fitness = self.fitness_function(self.train, self.get_fittest_individual())
-        validation_fitness = self.fitness_function(self.validation, self.get_fittest_individual())
-
         self.population = new_population
         self.population_fitness = new_generation_fitness
-        print(len(self.population))
-        return train_fitness, validation_fitness
+
+        max_fitness = self.fitness_function(self.train, self.get_fittest_individual())
+        validation_fitness = self.fitness_function(self.validation, self.get_fittest_individual())
+        return max_fitness, validation_fitness
 
     def get_fittest_individual(self):
         return max(self.population_fitness.items(), key=lambda pair: pair[1])[0]
