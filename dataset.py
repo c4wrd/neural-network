@@ -158,6 +158,22 @@ class Datasets:
                 print(row)
         return Dataset(data, DatasetType.CLASSIFICATION, 8, 10)
 
+    @staticmethod
+    def ecoli():
+        f = open("dataset_files/ecoli.txt")
+        writer = csv.reader(f.readlines(), delimiter=",")
+        data = []
+        for row in writer:
+            try:
+                inputs = [float(val) for val in row[1:-1] if len(val.strip()) > 0]
+                expected_class = int(row[-1])
+                expected_outputs = [0 for i in range(7)]
+                expected_outputs[expected_class] = 1
+                data.append([inputs, expected_outputs])
+            except:
+                print(row)
+        return Dataset(data, DatasetType.CLASSIFICATION, 7, 7)
+
 
 class DatasetLoader:
 
@@ -165,7 +181,8 @@ class DatasetLoader:
         "seeds": Datasets.seeds,
         "glass": Datasets.glass,
         "contraceptive": Datasets.contraceptive,
-        "yeast": Datasets.yeast
+        "yeast": Datasets.yeast,
+        "ecoli": Datasets.ecoli
     }
 
     @classmethod
