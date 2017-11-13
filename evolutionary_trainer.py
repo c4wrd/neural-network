@@ -3,6 +3,7 @@ import signal
 import sys
 
 from dataset import Datasets, DatasetLoader, DatasetType
+from nn.diff_ev import DETrainer
 from nn.ga import GATrainer
 from experiment import *
 from nn.mpl import MPLTrainer
@@ -17,8 +18,8 @@ parser.add_argument("results", help="The results file to save to")
 parser.add_argument("models", help="The models file to save to")
 parser.add_argument("-p", "--population_size", help="The population size for GA or mu parameter for ES", type=int)
 parser.add_argument("-t", "--tournament_size", help="The tournament size for GA", type=int)
-parser.add_argument("-a", "--alpha", help="The probability of crossover for DE", type=int)
-parser.add_argument("-b", "--crossover_probability", help="The probability of crossover for DE", type=int)
+parser.add_argument("-a", "--alpha", help="The probability of crossover for DE", type=float)
+parser.add_argument("-b", "--beta", help="The beta parameter for DE", type=float)
 parser.add_argument("-l", "--lambda_parameter", help="The lambda parameter for ES", type=int)
 
 
@@ -48,7 +49,19 @@ if __name__ == "__main__":
                             output_transfer=output_transfer,
                             tournament_size=args.tournament_size)
     elif args.strategy == "de":
-        raise NotImplementedError()
+        if args.population_size is None:
+            raise Exception("Population size must be specified")
+        if args.alpha is None:
+            raise Exception("Alpha parameter (crossover rate) must be specified")
+        if args.beta is None:
+            raise Exception("Beta parameter must be specified")
+        trainer = DETrainer(
+            ps=args.population_size,
+            pop_s=shape,
+            alpha=args.alpha,
+            beta=args.beta,
+            dataset=dataset
+        )
     else:
         raise Exception("%s is not a valid training strategy" % args.strategy)
 

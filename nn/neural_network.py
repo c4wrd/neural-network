@@ -11,11 +11,10 @@ class Neuron:
 
     def __init__(self, num_inputs = None, transfer_function = "logistic",
                 neuron_json = None):
-        # TODO add bias to weight vector
         self.num_weights = num_inputs
         if neuron_json is None:
-            self.weights = np.random.uniform(0, 1, num_inputs)
-            #self.weights = np.random.rand(num_inputs)
+            # self.weights = np.random.uniform(0, 1, num_inputs)
+            self.weights = np.random.rand(num_inputs)
             self.bias = random.random()
         else:
             self.weights = neuron_json["weights"]

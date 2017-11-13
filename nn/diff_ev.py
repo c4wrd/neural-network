@@ -1,18 +1,22 @@
 import random
+
+from dataset import Dataset
 from nn.neural_network import NetworkShape
-from nn.evolution import EvolutionaryStrategy
+from nn.evolution import EvolutionaryStrategy, FitnessFunctions
 from nn.mlff import MLFFNetwork
 
 
 class DETrainer(EvolutionaryStrategy):
-    def __init__(self, ps, pop_s, alpha, beta, data: [[[],[]]]):
+    def __init__(self, ps, pop_s, alpha, beta, dataset: Dataset, fitness_fn=FitnessFunctions.squared_error):
         self.population_size = ps
         self.pop_s = pop_s
-        self.population = self.gen_pop()
         self.alpha = alpha
         self.beta = beta
-        self.data = data
+        self.train = dataset.get_train()
+        self.validation = dataset.get_validation()
         self.population_fitness = {}
+        self.fitness_function = fitness_fn
+        self.population = self.gen_pop()
 
     def big3(self,arr):
         return arr.index(max(arr))
@@ -21,6 +25,7 @@ class DETrainer(EvolutionaryStrategy):
         population = []
         for p in range(self.population_size):
             new_indiv = MLFFNetwork(self.pop_s.num_inputs, self.pop_s.num_hidden_layers, self.pop_s.num_hidden_nodes, self.pop_s.num_outputs)
+            self.population_fitness[new_indiv] = self.indiv_fitness(new_indiv)
             population.append(new_indiv)
         return population
 
@@ -54,18 +59,11 @@ class DETrainer(EvolutionaryStrategy):
         return (p,error_p) if error_p < error_u else (u,error_u)
 
     def indiv_fitness(self, p):
-        input, expected = zip(*[(row[0], row[1]) for row in self.data])
-        error_p = 0
-        for val, exp in zip(input, expected):
-            actual_p = p.forward(val)
-            for a, e in zip(actual_p, exp):
-                error_p += (e-a)**2
-        return (p, error_p)
+        return self.fitness_function(self.train, p)
 
     def run_generation(self):
         new_population = []
-        copy_fitness = {}
-        self.population_fitness = {}
+        new_generation_fitness = {}
 
         for iteration in range(self.population_size):
             p = self.population[iteration]
@@ -76,25 +74,39 @@ class DETrainer(EvolutionaryStrategy):
             x2 = self.population[sample[1]]
             x3 = self.population[sample[2]]
             u = self.crossover(p,x1,x2,x3)
-            best = self.fitness(p,u)
-            self.population_fitness[best[0]] = -best[1]        # storing the negative of the squared error so that retrieivng max returns fittest indiv
+            fitness_u = self.indiv_fitness(u)
+            if fitness_u > self.population_fitness[p]:
+                # replace p with u
+                new_generation_fitness[u] = fitness_u
+                self.population_fitness[u] = fitness_u
+                self.population_fitness.pop(p)
+            else:
+                # add p to our new generation
+                new_generation_fitness[p] = self.population_fitness[p]
 
         for i in range(int(self.population_size*.75)+1):
             indiv = self.get_fittest_individual()
-            self.population_fitness.pop(indiv[0])
-            new_population.append(indiv[0])
-            copy_fitness[indiv[0]] = indiv[1]
+            fitness_indiv = self.population_fitness[indiv]
+            new_population.append(indiv)
+            new_generation_fitness[indiv] = fitness_indiv
+            self.population_fitness.pop(indiv)
 
         for i in range(int(self.population_size*.25)):
-            new_indiv = self.indiv_fitness(MLFFNetwork(self.pop_s.num_inputs, self.pop_s.num_hidden_layers, self.pop_s.num_hidden_nodes, self.pop_s.num_outputs))
-            new_population.append(new_indiv[0])
-            copy_fitness[new_indiv[0]] = -new_indiv[1]
+            new_indev = MLFFNetwork(self.pop_s.num_inputs, self.pop_s.num_hidden_layers, self.pop_s.num_hidden_nodes, self.pop_s.num_outputs)
+            new_indiv_fitness = self.indiv_fitness(new_indev)
+            new_population.append(new_indev)
+            new_generation_fitness[new_indev] = new_indiv_fitness
+
+        train_fitness = self.fitness_function(self.train, self.get_fittest_individual())
+        validation_fitness = self.fitness_function(self.validation, self.get_fittest_individual())
 
         self.population = new_population
-        self.population_fitness = copy_fitness
+        self.population_fitness = new_generation_fitness
+        print(len(self.population))
+        return train_fitness, validation_fitness
 
     def get_fittest_individual(self):
-        return max(self.population_fitness.items(), key=lambda pair: pair[1])
+        return max(self.population_fitness.items(), key=lambda pair: pair[1])[0]
 
 
 

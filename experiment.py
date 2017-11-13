@@ -6,7 +6,7 @@ from nn.evolution import EvolutionaryStrategy
 from nn.neural_network import ArtificialNeuralNetwork
 from nn.trainer import NetworkTrainer
 from util import QueuedCsvWriter
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, precision_score, recall_score, accuracy_score
 
 
 class Experiment:
@@ -14,7 +14,6 @@ class Experiment:
     def __init__(self,
                  results_file_name,
                  models_file_name,
-                 classification_convergence_file_name,
                  epoch_patience=100):
         """
 
@@ -26,7 +25,7 @@ class Experiment:
         :param epoch_patience: Number of epochs for which if the error
             doesn't change, assume we are in a minimum and stop training.
         """
-        self.results_recorder = QueuedCsvWriter(results_file_name, ["epoch", "mse_train", "mse_validation"])
+        self.results_recorder = QueuedCsvWriter(results_file_name, ["epoch", "mse_train", "mse_validation", "precision", "recall", "accuracy"])
         self.models_recorder = QueuedCsvWriter(models_file_name, ["epoch", "model"], 1)
 
         # queues to store the last n epochs mean squared errors
@@ -151,26 +150,33 @@ class BackpropExperiment(Experiment):
         for [epoch, mse_train, mse_validation] in self.trainer.train_batch():
             print("epoch=%d, mse_train=%f, mse_validation=%f" % (epoch, mse_train, mse_validation))
             self.epoch = epoch
+            self.mse_train = mse_train
+            self.mse_validation = mse_validation
             self.mse_train_queue.append(round(mse_train, 6))
             self.mse_validation_queue.append(round(mse_validation, 6))
 
-            self.results_recorder.writerow([str(epoch), "%f" % mse_train, "%f" % mse_validation])
             if epoch % 50 == 0:
                 self.save_model(epoch)
 
-            if epoch % 100 == 0:
-                self.print_stats()
+            if epoch % 50 == 0:
+                self.save_stats()
 
             if self.should_stop_training():
                 print("=== Training was completed. ===")
-                self.print_stats()
+                self.save_stats()
                 self.trainer.stop()
 
-    def print_stats(self):
+    def save_stats(self):
         if self.dataset.type == DatasetType.CLASSIFICATION:
             # print a classification report on the accuracy
             X, Y = self.dataset.X, self.dataset.CLASS_Y
             predicted_y = self.network.predict(X, True)
+            precision = precision_score(Y, predicted_y, average="weighted")
+            recall = recall_score(Y, predicted_y, average="weighted")
+            accuracy = accuracy_score(Y, predicted_y)
+            self.results_recorder.writerow(
+                [str(self.epoch), str(self.mse_train), str(self.mse_validation), str(precision), str(recall), str(accuracy)]
+            )
             print(classification_report(Y, predicted_y))
 
     def save_model(self, epoch):
@@ -179,7 +185,7 @@ class BackpropExperiment(Experiment):
         self.models_recorder.writerow([str(epoch), model_serialized])
 
     def exit_handler(self):
-        self.print_stats()
+        self.save_stats()
         super().exit_handler()
 
 class EvolutionaryExperiment(Experiment):
@@ -201,6 +207,8 @@ class EvolutionaryExperiment(Experiment):
         for generation in range(self.max_generations):
             self.epoch = generation
             [train_fitness, validation_fitness] = self.trainer.run_generation()
+            self.train_fitness = train_fitness
+            self.validation_fitness = validation_fitness
             print("generation=%d, train_fitness=%f, valid_fitness=%f" % (generation, train_fitness, validation_fitness))
             self.mse_train_queue.append(round(train_fitness, 6))
             self.mse_validation_queue.append(round(validation_fitness, 6))
@@ -212,29 +220,37 @@ class EvolutionaryExperiment(Experiment):
                 self.save_model(generation)
 
             # print statistics over time
-            if generation % 100 == 0:
-                self.print_stats()
+            if generation % 50 == 0:
+                self.results_recorder.writerow([str(generation), "%f" % train_fitness, "%f" % validation_fitness])
+                self.save_stats()
 
             if self.should_stop_training():
+                self.save_stats()
                 print("=== Training was completed. ===")
                 break
 
-        self.print_stats()
+        self.save_stats()
 
     def save_model(self, epoch):
         model = self.trainer.get_fittest_individual().json()
         model_serialized = json.dumps(model)
         self.models_recorder.writerow([str(epoch), model_serialized])
 
-    def print_stats(self):
+    def save_stats(self):
         if self.dataset.type == DatasetType.CLASSIFICATION:
             # print a classification report on the accuracy
             X, Y = self.dataset.X, self.dataset.CLASS_Y
             network = self.trainer.get_fittest_individual()
             predicted_y = network.predict(X, True)
+            precision = precision_score(Y, predicted_y, average="weighted")
+            recall = recall_score(Y, predicted_y, average="weighted")
+            accuracy = accuracy_score(Y, predicted_y)
             print(classification_report(Y, predicted_y))
+            self.results_recorder.writerow(
+                [str(self.epoch), str(self.train_fitness), str(self.validation_fitness), str(precision), str(recall), str(accuracy)]
+            )
 
 
     def exit_handler(self):
-        self.print_stats()
+        self.save_stats()
         super().exit_handler()
