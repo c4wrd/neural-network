@@ -143,6 +143,7 @@ class BackpropExperiment(Experiment):
         super().__init__(results_file_name, models_file_name, epoch_patience)
         training_set = dataset.get_train()
         validation_set = dataset.get_validation()
+        self.dataset = dataset
         self.network = network
         self.trainer = NetworkTrainer(network, training_set, validation_set, learning_rate, classification=classification, num_classes=num_classes)
 
@@ -160,6 +161,14 @@ class BackpropExperiment(Experiment):
             if self.should_stop_training():
                 print("=== Training was completed. ===")
                 self.trainer.stop()
+
+    def print_stats(self):
+        if self.dataset.type == DatasetType.CLASSIFICATION:
+            # print a classification report on the accuracy
+            X, Y = self.dataset.X, self.dataset.CLASS_Y
+            network = self.trainer.get_fittest_individual()
+            predicted_y = network.predict(X, True)
+            print(classification_report(Y, predicted_y))
 
     def save_model(self, epoch):
         model = self.network.json()

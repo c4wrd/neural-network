@@ -121,9 +121,11 @@ class Datasets:
         for line in f:
             inputs = line.split(',')
             inputs = inputs[1:]
+            expected_outputs = [0 for i in range(7)]
             expected = int(inputs[-1])-1
+            expected_outputs[expected] = 1
             inputs = [float(val.strip()) for val in inputs[:9]]
-            data.append([inputs,expected])
+            data.append([inputs,expected_outputs])
         return Dataset(data, DatasetType.CLASSIFICATION, 9, 7)
 
 

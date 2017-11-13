@@ -5,6 +5,7 @@ import sys
 from dataset import Datasets, DatasetLoader, DatasetType
 from nn.ga import GATrainer
 from experiment import *
+from nn.mpl import MPLTrainer
 from nn.neural_network import NetworkShape
 
 parser = argparse.ArgumentParser()
@@ -14,8 +15,12 @@ parser.add_argument("num_hidden_layers", help="The number of hidden layers for t
 parser.add_argument("num_nodes_layer", help="The number of nodes per hidden layer", type=int)
 parser.add_argument("results", help="The results file to save to")
 parser.add_argument("models", help="The models file to save to")
-parser.add_argument("-p", "--population_size", help="The population size for GA", type=int)
+parser.add_argument("-p", "--population_size", help="The population size for GA or mu parameter for ES", type=int)
 parser.add_argument("-t", "--tournament_size", help="The tournament size for GA", type=int)
+parser.add_argument("-a", "--alpha", help="The probability of crossover for DE", type=int)
+parser.add_argument("-b", "--crossover_probability", help="The probability of crossover for DE", type=int)
+parser.add_argument("-l", "--lambda_parameter", help="The lambda parameter for ES", type=int)
+
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -24,7 +29,16 @@ if __name__ == "__main__":
     output_transfer = "linear" if dataset.type == DatasetType.REGRESSION else "logistic"
     shape = NetworkShape(dataset.num_inputs, args.num_hidden_layers, args.num_nodes_layer, dataset.num_outputs)
     if args.strategy == "mpl":
-        raise NotImplementedError()
+        if args.population_size is None:
+            raise Exception("Population size must be specified (mu)")
+        if args.lambda_parameter is None:
+            raise Exception("Lambda parameter must be specified")
+        trainer = MPLTrainer(shape=shape,
+                             mu_size=args.population_size,
+                             lambda_size=args.lambda_parameter,
+                             dataset=dataset,
+                             output_transfer=output_transfer,
+                             tournament_size=args.tournament_size)
     elif args.strategy == "ga":
         if args.population_size is None:
             raise Exception("Population size must be specified")

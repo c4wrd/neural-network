@@ -9,21 +9,27 @@ from nn.evolution import EvolutionaryStrategy, squared_error, classification_acc
 from nn.mlff import MLFFNetwork
 from nn.neural_network import NetworkShape
 
-class GATrainer(EvolutionaryStrategy):
+"""
+Trains a given neural network shape on the given dataset
+using a (mu + lambda) evolution strategy.
+"""
+class MPLTrainer(EvolutionaryStrategy):
 
-    def __init__(self, 
-                network_shape: NetworkShape,
-                pop_size: int,
-                dataset: Dataset,
-                output_transfer="logistic",
-                hidden_transfer="logistic",
-                crossover_rate: float = 0.4,
-                mutation_rate: float = 0.1,
-                tournament_size: int = 3,
-                fitness_function = FitnessFunctions.squared_error):
+    def __init__(self,
+                 network_shape: NetworkShape,
+                 mu_size: int,
+                 lambda_size: int,
+                 dataset: Dataset,
+                 output_transfer="logistic",
+                 hidden_transfer="logistic",
+                 crossover_rate: float = 0.4,
+                 mutation_rate: float = 0.1,
+                 tournament_size: int = 3,
+                 fitness_function = FitnessFunctions.squared_error):
         self.population = []
         self.population_fitness = {}
-        self.pop_size = pop_size
+        self.mu_size = mu_size
+        self.lambda_size = lambda_size
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.network_shape = network_shape
@@ -38,7 +44,10 @@ class GATrainer(EvolutionaryStrategy):
         self.__init_population__()
     
     def __init_population__(self):
-        for i in range(self.pop_size):
+        """
+        Initializes our initial mu individuals
+        """
+        for i in range(self.mu_size):
             network = self.create_individual()
             self.update_fitness(network)
             self.population.append(network)
@@ -73,26 +82,15 @@ class GATrainer(EvolutionaryStrategy):
             population_fitness[individual] = fitness
         return fitness
 
-    """
-    def calculate_classification_accuracy(self, individual):
-        correct = 0
-        for row in self.train_data:
-            inputs = row[0]
-            expected = row[1]
-            prediction = individual.forward(inputs)
-            predicted_class = prediction.index(max(prediction))
-            if expected[predicted_class] == 1:
-                correct += 1
-        return correct
-    """
-
     def get_fittest_individual(self):
         # returns the fittest network
         return max(self.population_fitness.items(), key=lambda pair: pair[1])[0]
 
     def run_generation(self):
+
+        # generate our child population
         child_population = []
-        while len(child_population) <= self.pop_size:
+        while len(child_population) <= self.lambda_size:
             p1 = self.select_parent()
             p2 = self.select_parent()
             c1, c2 = self.single_point_crossover(p1, p2)
@@ -100,19 +98,27 @@ class GATrainer(EvolutionaryStrategy):
             self.mutate(c2)
             child_population.extend([c1, c2])
 
-        self.population_fitness = {}
-
         # compute the fitness of each of the children in parallel
         fitness_fn = partial(self.fitness_function, self.train_data)
         fitness_results = self.pool.map(fitness_fn, child_population)
         for individual, fitness in zip(child_population, fitness_results):
             self.population_fitness[individual] = fitness
-
-        # set the population for the next generation
-        self.population = child_population
-
+        
+        # sort individuals by their fitness "survival of the fittest"
         all_individuals = sorted(self.population_fitness.items(), key=lambda tuple: tuple[1])
-        min_fitness = all_individuals[-1][1]
+
+        # store our fittest individual for progress over time
+        min_fitness  = all_individuals[-1][1]
+
+        # pop off our mu individuals that are the fittest
+        new_population = [all_individuals.pop() for i in range(self.mu_size)]
+
+        # remove old networks from being tracked
+        for individual, fitness in all_individuals:
+            self.population_fitness.pop(individual)
+
+        # set population to new population
+        self.population = [individual for individual, fitness in new_population]
 
         validation_fitness = self.fitness_function(self.test_data, self.get_fittest_individual())
 
@@ -201,27 +207,3 @@ class GATrainer(EvolutionaryStrategy):
                     if should_mutate:
                         weight = weights[wi]
                         neuron.set_weight(wi, weight + random.uniform(-0.1, 0.1))
-
-
-# from dataset import Datasets
-# shape = NetworkShape(1, 2, 10, 1)
-# trainer = GATrainer(shape,
-#                     15,
-#                     Datasets.linear(),
-#                     output_transfer="linear",
-#                     crossover_rate=0.6,
-#                     mutation_rate=0.1,
-#                     tournament_size=4,
-#                     pool_size=4)
-#
-# #start = trainer.calculate_classification_accuracy(trainer.get_fittest_individual())
-#
-# try:
-#     for i in range(1000000):
-#         print("%d: %.6f" % ( i, trainer.run_generation()))
-# except:
-#     pass
-#
-# #end = trainer.calculate_classification_accuracy(trainer.get_fittest_individual())
-#
-# print("Started with %.9f, ended with %.9f" % ( start, end ))
