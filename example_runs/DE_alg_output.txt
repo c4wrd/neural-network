@@ -1,0 +1,288 @@
+Started by user Cory Forward
+Building in workspace /var/lib/jenkins/workspace/denn_seeds
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/c4wrd/neural-network # timeout=10
+Fetching upstream changes from https://github.com/c4wrd/neural-network
+ > git --version # timeout=10
+ > git fetch --tags --progress https://github.com/c4wrd/neural-network +refs/heads/*:refs/remotes/origin/*
+ > git rev-parse refs/remotes/origin/develop^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/develop^{commit} # timeout=10
+Checking out Revision 9d25b2f87d87a69bdbfa2095632f3e155b40fd39 (refs/remotes/origin/develop)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 9d25b2f87d87a69bdbfa2095632f3e155b40fd39
+Commit message: "fixed experiment"
+ > git rev-list c39cea6867fc9279e019a7c2fb4f584a32b85124 # timeout=10
+$ bash -c "[ -d \$HOME/.pyenv ]"
+$ bash -c "cd /var/lib/jenkins/workspace/denn_seeds && env PYENV_ROOT\=\$HOME/.pyenv PYENV_VERSION\=anaconda3-5.0.1 \$HOME/.pyenv/bin/pyenv local 2>/dev/null || true"
+$ bash -c "mkdir \$HOME/.pyenv.lock"
+$ bash -c "env PYENV_ROOT\=\$HOME/.pyenv PYENV_VERSION\=anaconda3-5.0.1 \$HOME/.pyenv/bin/pyenv versions --bare"
+$ bash -c "env PYENV_ROOT\=\$HOME/.pyenv PYENV_VERSION\=anaconda3-5.0.1 \$HOME/.pyenv/bin/pyenv rehash"
+$ bash -c "env PYENV_ROOT\=\$HOME/.pyenv PYENV_VERSION\=anaconda3-5.0.1 \$HOME/.pyenv/bin/pyenv exec pip list"
+$ bash -c "env PYENV_ROOT\=\$HOME/.pyenv PYENV_VERSION\=anaconda3-5.0.1 \$HOME/.pyenv/bin/pyenv rehash"
+$ bash -c "rm -rf \$HOME/.pyenv.lock"
+[denn_seeds] $ /bin/sh -xe /tmp/jenkins4367546094055426702.sh
++ python -u evolutionary_trainer.py -p 21 -a 0.3 -b 0.5 seeds de 1 7 results.csv models.csv
+=====
+Starting experiment.
+    epoch_patience: 100
+    results_file  : results.csv
+    models_file   : models.csv
+=====
+            
+generation=0, train_fitness=-128.841321, valid_fitness=-54.923271
+/var/lib/jenkins/.pyenv/versions/anaconda3-5.0.1/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+/var/lib/jenkins/.pyenv/versions/anaconda3-5.0.1/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00        70
+          1       0.33      1.00      0.50        70
+          2       0.00      0.00      0.00        70
+
+avg / total       0.11      0.33      0.17       210
+
+generation=1, train_fitness=-128.841321, valid_fitness=-54.923271
+generation=2, train_fitness=-127.177519, valid_fitness=-54.509873
+generation=3, train_fitness=-119.037483, valid_fitness=-50.365569
+generation=4, train_fitness=-111.232209, valid_fitness=-47.355557
+generation=5, train_fitness=-100.767068, valid_fitness=-43.430436
+generation=6, train_fitness=-81.467988, valid_fitness=-36.021821
+generation=7, train_fitness=-75.082303, valid_fitness=-32.721823
+generation=8, train_fitness=-75.082303, valid_fitness=-32.721823
+generation=9, train_fitness=-75.082303, valid_fitness=-32.721823
+generation=10, train_fitness=-65.300646, valid_fitness=-29.102066
+generation=11, train_fitness=-65.300646, valid_fitness=-29.102066
+generation=12, train_fitness=-65.300646, valid_fitness=-29.102066
+generation=13, train_fitness=-52.722834, valid_fitness=-22.474154
+generation=14, train_fitness=-52.722834, valid_fitness=-22.474154
+generation=15, train_fitness=-52.722834, valid_fitness=-22.474154
+generation=16, train_fitness=-52.722834, valid_fitness=-22.474154
+generation=17, train_fitness=-52.722834, valid_fitness=-22.474154
+generation=18, train_fitness=-48.527063, valid_fitness=-22.089728
+generation=19, train_fitness=-48.527063, valid_fitness=-22.089728
+generation=20, train_fitness=-48.527063, valid_fitness=-22.089728
+generation=21, train_fitness=-48.527063, valid_fitness=-22.089728
+generation=22, train_fitness=-48.527063, valid_fitness=-22.089728
+generation=23, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=24, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=25, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=26, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=27, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=28, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=29, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=30, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=31, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=32, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=33, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=34, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=35, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=36, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=37, train_fitness=-45.420703, valid_fitness=-19.111811
+generation=38, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=39, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=40, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=41, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=42, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=43, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=44, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=45, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=46, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=47, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=48, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=49, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=50, train_fitness=-43.504962, valid_fitness=-19.005637
+             precision    recall  f1-score   support
+
+          0       0.18      0.07      0.10        70
+          1       0.00      0.00      0.00        70
+          2       0.38      1.00      0.56        70
+
+avg / total       0.19      0.36      0.22       210
+
+generation=51, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=52, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=53, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=54, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=55, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=56, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=57, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=58, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=59, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=60, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=61, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=62, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=63, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=64, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=65, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=66, train_fitness=-43.504962, valid_fitness=-19.005637
+generation=67, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=68, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=69, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=70, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=71, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=72, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=73, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=74, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=75, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=76, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=77, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=78, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=79, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=80, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=81, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=82, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=83, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=84, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=85, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=86, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=87, train_fitness=-42.877742, valid_fitness=-18.153640
+generation=88, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=89, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=90, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=91, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=92, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=93, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=94, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=95, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=96, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=97, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=98, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=99, train_fitness=-42.663250, valid_fitness=-18.234963
+generation=100, train_fitness=-34.298091, valid_fitness=-14.637440
+             precision    recall  f1-score   support
+
+          0       0.51      0.84      0.63        70
+          1       1.00      0.24      0.39        70
+          2       0.86      0.94      0.90        70
+
+avg / total       0.79      0.68      0.64       210
+
+generation=101, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=102, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=103, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=104, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=105, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=106, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=107, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=108, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=109, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=110, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=111, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=112, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=113, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=114, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=115, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=116, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=117, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=118, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=119, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=120, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=121, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=122, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=123, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=124, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=125, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=126, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=127, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=128, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=129, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=130, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=131, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=132, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=133, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=134, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=135, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=136, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=137, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=138, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=139, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=140, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=141, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=142, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=143, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=144, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=145, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=146, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=147, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=148, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=149, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=150, train_fitness=-34.298091, valid_fitness=-14.637440
+             precision    recall  f1-score   support
+
+          0       0.51      0.84      0.63        70
+          1       1.00      0.24      0.39        70
+          2       0.86      0.94      0.90        70
+
+avg / total       0.79      0.68      0.64       210
+
+generation=151, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=152, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=153, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=154, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=155, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=156, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=157, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=158, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=159, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=160, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=161, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=162, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=163, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=164, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=165, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=166, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=167, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=168, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=169, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=170, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=171, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=172, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=173, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=174, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=175, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=176, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=177, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=178, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=179, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=180, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=181, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=182, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=183, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=184, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=185, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=186, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=187, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=188, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=189, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=190, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=191, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=192, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=193, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=194, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=195, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=196, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=197, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=198, train_fitness=-34.298091, valid_fitness=-14.637440
+generation=199, train_fitness=-34.298091, valid_fitness=-14.637440
+== Error hasn't changed for 100 epochs, stopping training ==
+== Error hasn't changed for 100 epochs, stopping training ==
+             precision    recall  f1-score   support
+
+          0       0.51      0.84      0.63        70
+          1       1.00      0.24      0.39        70
+          2       0.86      0.94      0.90        70
+
+avg / total       0.79      0.68      0.64       210
+
+=== Training was completed. ===
+             precision    recall  f1-score   support
+
+          0       0.51      0.84      0.63        70
+          1       1.00      0.24      0.39        70
+          2       0.86      0.94      0.90        70
+
+avg / total       0.79      0.68      0.64       210
+
+Finished: SUCCESS

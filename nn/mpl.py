@@ -63,6 +63,10 @@ class MPLTrainer(EvolutionaryStrategy):
         )
 
     def select_parent(self):
+        """
+        Selection operator to select tournament_size parents through
+        tournament selection
+        """
         candidates = [random.choice(self.population) for i in range(self.tournament_size)]
         return max(candidates, key=lambda candidate: self.population_fitness[candidate])
 
@@ -179,8 +183,11 @@ class MPLTrainer(EvolutionaryStrategy):
                 p2_weights = n2.get_weights()
                 num_weights = len(p1_weights)
 
+                # for each weight in each parent
                 for weight_index in range(num_weights):
+                    # specify the weight for child 1
                     c1_weight = self.crossover_rate*p1_weights[weight_index] + (1-self.crossover_rate)*p2_weights[weight_index]
+                    # specify the weight for child 2
                     c2_weight = self.crossover_rate * p2_weights[weight_index] + (1 - self.crossover_rate) * p1_weights[weight_index]
 
                     c1.layers[layer_index][neuron_index].set_weight(weight_index, c1_weight)

@@ -23,6 +23,10 @@ parser.add_argument("-b", "--beta", help="The beta parameter for DE", type=float
 parser.add_argument("-l", "--lambda_parameter", help="The lambda parameter for ES", type=int)
 
 
+"""
+Trains a neural network based on the provided dataset, using the 
+specified evolutionary algorithm to train the network.
+"""
 if __name__ == "__main__":
     args = parser.parse_args()
 
