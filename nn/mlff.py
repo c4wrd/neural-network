@@ -17,7 +17,7 @@ class MLFFNetwork(ArtificialNeuralNetwork):
                  num_nodes_layer = 3,
                  num_outputs = 1,
                  hidden_transfer = "logistic",
-                 output_transfer = "linear",
+                 output_transfer = "logistic",
                  momentum_factor=0.5):
         """
         Constructs an instance of a multi-layer feed forward
@@ -158,8 +158,12 @@ class MLFFNetwork(ArtificialNeuralNetwork):
         #         inputs = [neuron.output for neuron in prev_layer]
         #     for neuron in layer:
         #         for j in range(len(inputs)):
-        #             # update the jth weight for the jth input
-        #             neuron.weights[j] += self.learning_rate * neuron.delta * inputs[j]
+        #             dw_j = self.learning_rate * neuron.delta * inputs[j]
+        #             if j in neuron.dw:
+        #                 neuron.weights[j] += dw_j + (self.momentum_factor * neuron.dw[j])
+        #             else:
+        #                 neuron.weights[j] += dw_j
+        #             neuron.dw[j] = dw_j
         #         neuron.bias += self.learning_rate * neuron.delta
 
     def train(self, inputs, expected_outputs):

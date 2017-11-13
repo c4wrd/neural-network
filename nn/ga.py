@@ -108,11 +108,21 @@ class GATrainer(EvolutionaryStrategy):
         for individual, fitness in zip(child_population, fitness_results):
             self.population_fitness[individual] = fitness
 
-        # set the population for the next generation
-        self.population = child_population
-
+        # sort individuals by their fitness "survival of the fittest"
         all_individuals = sorted(self.population_fitness.items(), key=lambda tuple: tuple[1])
+
+        # store our fittest individual for progress over time
         min_fitness = all_individuals[-1][1]
+
+        # pop off our mu individuals that are the fittest
+        new_population = [all_individuals.pop() for i in range(self.mu_size)]
+
+        # remove old networks from being tracked
+        for individual, fitness in all_individuals:
+            self.population_fitness.pop(individual)
+
+        # set population to new population
+        self.population = [individual for individual, fitness in new_population]
 
         validation_fitness = self.fitness_function(self.test_data, self.get_fittest_individual())
 

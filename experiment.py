@@ -14,6 +14,7 @@ class Experiment:
     def __init__(self,
                  results_file_name,
                  models_file_name,
+                 classification_convergence_file_name,
                  epoch_patience=100):
         """
 
@@ -75,7 +76,6 @@ Starting experiment.
         return any(conditions)
 
     def err_not_changing(self, err_queue: deque):
-        # TODO verify this is working as expected
         if len(err_queue) == self.epoch_patience:
             # a set cannot contain duplicates
             # so if the length is 1, then we have
@@ -151,29 +151,36 @@ class BackpropExperiment(Experiment):
         for [epoch, mse_train, mse_validation] in self.trainer.train_batch():
             print("epoch=%d, mse_train=%f, mse_validation=%f" % (epoch, mse_train, mse_validation))
             self.epoch = epoch
-            self.mse_train_queue.append(mse_train)
-            self.mse_validation_queue.append(mse_validation)
+            self.mse_train_queue.append(round(mse_train, 6))
+            self.mse_validation_queue.append(round(mse_validation, 6))
 
             self.results_recorder.writerow([str(epoch), "%f" % mse_train, "%f" % mse_validation])
             if epoch % 50 == 0:
                 self.save_model(epoch)
 
+            if epoch % 100 == 0:
+                self.print_stats()
+
             if self.should_stop_training():
                 print("=== Training was completed. ===")
+                self.print_stats()
                 self.trainer.stop()
 
     def print_stats(self):
         if self.dataset.type == DatasetType.CLASSIFICATION:
             # print a classification report on the accuracy
             X, Y = self.dataset.X, self.dataset.CLASS_Y
-            network = self.trainer.get_fittest_individual()
-            predicted_y = network.predict(X, True)
+            predicted_y = self.network.predict(X, True)
             print(classification_report(Y, predicted_y))
 
     def save_model(self, epoch):
         model = self.network.json()
         model_serialized = json.dumps(model)
         self.models_recorder.writerow([str(epoch), model_serialized])
+
+    def exit_handler(self):
+        self.print_stats()
+        super().exit_handler()
 
 class EvolutionaryExperiment(Experiment):
 
@@ -195,8 +202,8 @@ class EvolutionaryExperiment(Experiment):
             self.epoch = generation
             [train_fitness, validation_fitness] = self.trainer.run_generation()
             print("generation=%d, train_fitness=%f, valid_fitness=%f" % (generation, train_fitness, validation_fitness))
-            self.mse_train_queue.append(train_fitness)
-            self.mse_validation_queue.append(validation_fitness)
+            self.mse_train_queue.append(round(train_fitness, 6))
+            self.mse_validation_queue.append(round(validation_fitness, 6))
 
             self.results_recorder.writerow([str(generation), "%f" % train_fitness, "%f" % validation_fitness])
 

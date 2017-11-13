@@ -71,7 +71,7 @@ class NetworkTrainer:
             # yield the epoch and errors to determine whether training should continue
             yield [epoch, mse_training_set, mse_validation_set]
 
-    def train_batch(self, learning_rate=0.1, max_epochs=-1, start_epoch=0, batch_size=None, classify=False, num_classes=None):
+    def train_batch(self, learning_rate=0.1, max_epochs=-1, start_epoch=0, batch_size=None):
         self.network.set_learning_rate(learning_rate)
 
         batches = None
@@ -108,7 +108,7 @@ class NetworkTrainer:
                 mean_dweights = self.get_mean_gradients(batch_dweights)
                 self.network.apply_weight_gradients(mean_dweights)
 
-            mse_test_set = sum_error / len(self.training_set)    # mean squared error of the training set
+            mse_test_set = sum_error / 2    # mean squared error of the training set
             mse_validation_set = util.mean_squared_error(self.validation_set, self.network) # mse of validation set
 
             # yield the epoch, mean square errors to determine whether training should continue
