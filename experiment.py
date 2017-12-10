@@ -2,9 +2,6 @@ import json
 from collections import deque
 
 from dataset import Dataset, DatasetType
-from nn.evolution import EvolutionaryStrategy
-from nn.neural_network import ArtificialNeuralNetwork
-from nn.trainer import NetworkTrainer
 from util import QueuedCsvWriter
 from sklearn.metrics import classification_report, precision_score, recall_score, accuracy_score
 

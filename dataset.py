@@ -3,6 +3,8 @@ import numpy as np
 import csv
 import math
 
+from sklearn.preprocessing import normalize
+
 def rosenbrock(*x):
     x_total = len(x)
     sum = 0
