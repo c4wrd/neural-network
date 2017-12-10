@@ -1,8 +1,7 @@
-from Particle import Particle
+from clustering.pso.particle import Particle
 from sklearn.preprocessing import normalize as norm
 from sklearn import datasets as sk_data
 import matplotlib.pyplot as plot
-
 
 class PSO:
 
@@ -57,7 +56,3 @@ print(pso.gbest)
 
 #for particle in pso.particles:
 #    print(particle)
-
-
-
-

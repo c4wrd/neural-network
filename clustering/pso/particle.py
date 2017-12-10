@@ -60,8 +60,6 @@ class Particle:
                     curr_label = pair[0]
             new_labels.append(curr_label)
 
-        print('New Labels: ',new_labels)
-        print('Old Labels: ', dataset[1])
         fitness = h_score(dataset[1], new_labels)
 
         if self.fitness is None or self.fitness < fitness:
