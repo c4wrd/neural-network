@@ -37,12 +37,12 @@ class Particle:
     def update_current_state(self,min_bounds, max_bounds):
         for curr, vel in zip(self.current_state, self.velocity):
             for i in range(len(curr)):
-                if curr[i]+math.fabs(vel[i]) <= min_bounds:
+                if curr[i]+vel[i] <= min_bounds:
                     curr[i] = min_bounds
-                elif curr[i]+math.fabs(vel[i]) >= max_bounds:
+                elif curr[i]+vel[i] >= max_bounds:
                     curr[i] = max_bounds
                 else:
-                    curr[i] = curr[i] + math.fabs(vel[i])
+                    curr[i] = curr[i] + vel[i]
 
     # data expected as [[[],[],[],...],[classes]]
     def calculate_fitness(self, dataset):

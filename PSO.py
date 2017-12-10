@@ -39,6 +39,8 @@ test_data = [norm(x),y]
 pso = PSO(2,2,1,2,.5,10,test_data)
 
 plot.ion()
+plot.show()
+
 cmap = plot.cm.get_cmap('brg', 10)
 
 for i in range(100):
@@ -46,8 +48,7 @@ for i in range(100):
     for i in range(len(pso.particles)):
         for center in pso.particles[i].current_state:
             plot.scatter(center[0],center[1], c=cmap(i), s=3)
-    plot.show()
-    plot.pause(.1)
+    plot.pause(0.001)
     plot.gcf().clear()
 
     print("Fitness: ",pso.gbest_fitness)
