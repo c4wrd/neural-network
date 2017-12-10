@@ -165,7 +165,7 @@ class BackpropExperiment(Experiment):
         if self.dataset.type == DatasetType.CLASSIFICATION:
             # print a classification report on the accuracy
             X, Y = self.dataset.X, self.dataset.CLASS_Y
-            predicted_y = self.network.predict(X, True)
+            predicted_y = self.network.predict_single(X, True)
             precision = precision_score(Y, predicted_y, average="weighted")
             recall = recall_score(Y, predicted_y, average="weighted")
             accuracy = accuracy_score(Y, predicted_y)
@@ -230,7 +230,7 @@ class EvolutionaryExperiment(Experiment):
             # print a classification report on the accuracy
             X, Y = self.dataset.X, self.dataset.CLASS_Y
             network = self.trainer.get_fittest_individual()
-            predicted_y = network.predict(X, True)
+            predicted_y = network.predict_single(X, True)
             precision = precision_score(Y, predicted_y, average="weighted")
             recall = recall_score(Y, predicted_y, average="weighted")
             accuracy = accuracy_score(Y, predicted_y)
