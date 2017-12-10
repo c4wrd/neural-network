@@ -48,6 +48,9 @@ class KMeans(ClusteringAlgorithm):
         return [self.predict_single(input_pattern) for input_pattern in input_patterns]
 
     def run(self, max_epochs=1000):
+
+        best_score = [0,0]
+
         for trial in range(self.num_trials):
             print("Starting trial %d" % trial)
             for epoch in range(1, max_epochs):
@@ -73,14 +76,22 @@ class KMeans(ClusteringAlgorithm):
 
                     homogeneity = metrics.homogeneity_score(self.Y, new_predictions)
                     completeness = metrics.completeness_score(self.Y, new_predictions)
-                    print("completeness=%f, homogeneity=%f" % (completeness, homogeneity))
+                    print("%d: completeness=%f, homogeneity=%f" % (trial, completeness, homogeneity))
+
+                    # check if the homogeneity score and completeness score are the best in all trials so far
+                    if homogeneity + completeness > best_score[0] + best_score[1]:
+                        best_score = (completeness, homogeneity)
+                        print("%d: Best results found so far" % trial)
 
                     if not has_diff:
                         print("No change in the clusters, stopping.")
+                        # generate new centers for the next trial
                         self.generate_new_centers()
                         break
 
                 epoch += 1
+
+        print("After %d trials, the best score was: completeness=%f, homogeneity=%f" % (self.num_trials, best_score[0], best_score[1]))
 
 
 ds = DatasetLoader.load("seeds")
