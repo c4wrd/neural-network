@@ -94,7 +94,7 @@ class KMeans(ClusteringAlgorithm):
         print("After %d trials, the best score was: completeness=%f, homogeneity=%f" % (self.num_trials, best_score[0], best_score[1]))
 
 
-ds = DatasetLoader.load("seeds")
+ds = DatasetLoader.load("yeast")
 X, Y = ds.X, ds.CLASS_Y
 network = KMeans(ds.num_inputs, ds.num_outputs, X, Y)
-network.run(100000)
+network.run(1000)

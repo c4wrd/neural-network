@@ -63,11 +63,11 @@ class CompetitiveLearningNeuralNetwork(ClusteringAlgorithm):
 
                 homogeneity = metrics.homogeneity_score(self.Y, new_predictions)
                 completeness = metrics.completeness_score(self.Y, new_predictions)
-                print("completeness=%f, homogeneity=%f" % (completeness, homogeneity))
+                print("epoch=%d, completeness=%f, homogeneity=%f" % (epoch, completeness, homogeneity))
 
                 # check if no changes have occurred in the cluster assignments
                 if new_predictions == predictions and epoch > 10:
-                    print("No changes in clusters detected, training completed.")
+                    print("No changes in clusters detected, training completed after %d epochs." % epoch)
                     break
 
                 # update the predictions
@@ -76,7 +76,7 @@ class CompetitiveLearningNeuralNetwork(ClusteringAlgorithm):
             epoch += 1
 
 
-ds = DatasetLoader.load("ecoli")
+ds = DatasetLoader.load("contraceptive")
 X, Y = ds.X, ds.CLASS_Y
 network = CompetitiveLearningNeuralNetwork(ds.num_inputs, ds.num_outputs, X, Y, 0.01)
-network.run(100000)
+network.run()
