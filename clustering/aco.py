@@ -57,7 +57,6 @@ class ACOCluster(ClusteringAlgorithm):
                 # compute scores
 
 
-
 class Grid:
 
     def __init__(self, height, width, x, y, path, rand=True):
