@@ -1,0 +1,305 @@
+Starting trial 0
+0: completeness=1.000000, homogeneity=0.000000
+0: Best results found so far
+No change in the clusters, stopping.
+Starting trial 1
+1: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 2
+2: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 3
+3: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 4
+4: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 5
+5: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 6
+6: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 7
+7: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 8
+8: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 9
+9: completeness=0.705574, homogeneity=0.432236
+9: Best results found so far
+No change in the clusters, stopping.
+Starting trial 10
+10: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 11
+11: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 12
+12: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 13
+13: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 14
+14: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 15
+15: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 16
+16: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 17
+17: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 18
+18: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 19
+19: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 20
+20: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 21
+21: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 22
+22: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 23
+23: completeness=0.702235, homogeneity=0.420056
+No change in the clusters, stopping.
+Starting trial 24
+24: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 25
+25: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 26
+26: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 27
+27: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 28
+28: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 29
+29: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 30
+30: completeness=0.702235, homogeneity=0.420056
+No change in the clusters, stopping.
+Starting trial 31
+31: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 32
+32: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 33
+33: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 34
+34: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 35
+35: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 36
+36: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 37
+37: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 38
+38: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 39
+39: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 40
+40: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 41
+41: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 42
+42: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 43
+43: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 44
+44: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 45
+45: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 46
+46: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 47
+47: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 48
+48: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 49
+49: completeness=0.705574, homogeneity=0.432236
+49: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 50
+50: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 51
+51: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 52
+52: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 53
+53: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 54
+54: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 55
+55: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 56
+56: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 57
+57: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 58
+58: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 59
+59: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 60
+60: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 61
+61: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 62
+62: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 63
+63: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 64
+64: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 65
+65: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 66
+66: completeness=0.714501, homogeneity=0.425669
+66: Best results found so far
+No change in the clusters, stopping.
+Starting trial 67
+67: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 68
+68: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 69
+69: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 70
+70: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 71
+71: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 72
+72: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 73
+73: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 74
+74: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 75
+75: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 76
+76: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 77
+77: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 78
+78: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 79
+79: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 80
+80: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 81
+81: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 82
+82: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 83
+83: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 84
+84: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 85
+85: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 86
+86: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 87
+87: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 88
+88: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 89
+89: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 90
+90: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 91
+91: completeness=0.705574, homogeneity=0.432236
+No change in the clusters, stopping.
+Starting trial 92
+92: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 93
+93: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 94
+94: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 95
+95: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 96
+96: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 97
+97: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 98
+98: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+Starting trial 99
+99: completeness=1.000000, homogeneity=0.000000
+No change in the clusters, stopping.
+After 100 trials, the best score was: completeness=0.714501, homogeneity=0.425669

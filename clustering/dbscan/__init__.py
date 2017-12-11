@@ -104,7 +104,7 @@ class DBSCAN:
         plot.show()
 
 if __name__ == "__main__":
-    data = DatasetLoader.load('ecoli')
+    data = DatasetLoader.load('seeds')
 
     scanner = DBSCAN([data.X,data.CLASS_Y], .2, 4)  # You may want to disable to shuffling in dataset.Dataset
     scanner.classify_data()

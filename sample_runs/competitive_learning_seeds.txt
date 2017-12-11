@@ -1,0 +1,15 @@
+epoch=10, completeness=0.399773, homogeneity=0.191377
+epoch=20, completeness=0.395353, homogeneity=0.387812
+epoch=30, completeness=0.409943, homogeneity=0.397552
+epoch=40, completeness=0.416073, homogeneity=0.399609
+epoch=50, completeness=0.437682, homogeneity=0.419133
+epoch=60, completeness=0.419050, homogeneity=0.407447
+epoch=70, completeness=0.463713, homogeneity=0.455742
+epoch=80, completeness=0.446285, homogeneity=0.430817
+epoch=90, completeness=0.412807, homogeneity=0.400885
+epoch=100, completeness=0.416722, homogeneity=0.403537
+epoch=110, completeness=0.419050, homogeneity=0.407447
+epoch=120, completeness=0.434477, homogeneity=0.418813
+epoch=130, completeness=0.412807, homogeneity=0.400885
+epoch=140, completeness=0.412807, homogeneity=0.400885
+No changes in clusters detected, training completed after 140 epochs.

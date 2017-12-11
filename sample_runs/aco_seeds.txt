@@ -1,0 +1,90 @@
+C:\Users\z41r951\AppData\Local\Continuum\anaconda3\python.exe C:/Users/z41r951/workspace/neural-network/clustering/aco.py
+0
+45: completeness=0.062761, homogeneity=0.045049
+100
+45: completeness=0.062203, homogeneity=0.043443
+200
+45: completeness=0.060877, homogeneity=0.044538
+300
+45: completeness=0.060619, homogeneity=0.043362
+400
+45: completeness=0.072838, homogeneity=0.054098
+500
+45: completeness=0.067424, homogeneity=0.049502
+600
+45: completeness=0.081588, homogeneity=0.058814
+700
+45: completeness=0.054048, homogeneity=0.035292
+800
+45: completeness=0.049775, homogeneity=0.032803
+900
+45: completeness=0.065584, homogeneity=0.046695
+1000
+45: completeness=0.057402, homogeneity=0.036008
+1100
+45: completeness=0.047729, homogeneity=0.029864
+1200
+45: completeness=0.070875, homogeneity=0.046047
+1300
+45: completeness=0.031831, homogeneity=0.020200
+1400
+45: completeness=0.049565, homogeneity=0.034162
+1500
+45: completeness=0.076880, homogeneity=0.050379
+1600
+45: completeness=0.061192, homogeneity=0.040545
+1700
+45: completeness=0.062022, homogeneity=0.040171
+1800
+45: completeness=0.054303, homogeneity=0.036214
+1900
+45: completeness=0.054143, homogeneity=0.037921
+2000
+45: completeness=0.043546, homogeneity=0.027219
+2100
+45: completeness=0.032304, homogeneity=0.021172
+2200
+45: completeness=0.034733, homogeneity=0.022349
+2300
+45: completeness=0.030307, homogeneity=0.019134
+2400
+45: completeness=0.039436, homogeneity=0.027609
+2500
+45: completeness=0.028626, homogeneity=0.017827
+2600
+45: completeness=0.053581, homogeneity=0.037117
+2700
+45: completeness=0.037110, homogeneity=0.024709
+2800
+45: completeness=0.040037, homogeneity=0.026221
+2900
+45: completeness=0.039983, homogeneity=0.029174
+3000
+45: completeness=0.027923, homogeneity=0.020846
+3100
+45: completeness=0.061969, homogeneity=0.047715
+3200
+45: completeness=0.041565, homogeneity=0.032240
+3300
+45: completeness=0.080427, homogeneity=0.059831
+3400
+45: completeness=0.074006, homogeneity=0.055194
+3500
+45: completeness=0.031039, homogeneity=0.023846
+3600
+45: completeness=0.061774, homogeneity=0.048170
+3700
+45: completeness=0.071002, homogeneity=0.054083
+3800
+45: completeness=0.057403, homogeneity=0.043481
+3900
+45: completeness=0.045163, homogeneity=0.033188
+4000
+45: completeness=0.060709, homogeneity=0.043577
+4100
+45: completeness=0.058414, homogeneity=0.040904
+4200
+45: completeness=0.051434, homogeneity=0.040161
+4300
+45: completeness=0.043139, homogeneity=0.031783
+4400
