@@ -14,8 +14,8 @@ class PSO(ClusteringAlgorithm):
                  num_centers,
                  x,
                  y,
-                 personal_factor=2,
-                 global_factor=2,
+                 personal_factor=2.0,
+                 global_factor=2.0,
                  w=0.5,
                  particles=10):
         self.X = x
@@ -61,37 +61,33 @@ class PSO(ClusteringAlgorithm):
                 completeness = metrics.completeness_score(self.Y, new_predictions)
                 print("completeness=%f, homogeneity=%f, quantization_error=%f" % (completeness, homogeneity, self.gbest_fitness))
 
-            yield epoch
-#
-# if __name__ == "__main__":
-#     nclusters=2
-#     n_features=2
-#     x,y = sk_data.make_blobs(100,n_features,nclusters, cluster_std=1, random_state=1)
-#     g_factor = 1.49
-#     p_factor = 1.49
-#     inertia=0.5
-#     n_particles=7
-#     pso = PSO(n_features,nclusters, p_factor,g_factor,inertia,n_particles, x, y)
-#
-#     plot.ion()
-#     plot.show()
-#
-#     cmap = plot.cm.get_cmap('brg', 10)
-#
-#     for epoch in pso.run():
-#        # pso.run()
-#         for i in range(len(pso.particles)):
-#             for center in pso.particles[i].current_state:
-#                 plot.scatter(center[0],center[1], c=cmap(i), s=3)
-#                 plot.scatter([p[0] for p in x], [p[1] for p in x], color="blue")
-#                 g_best = pso.gbest
-#                 plot.scatter([p[0] for p in g_best], [p[1] for p in g_best], color="green")
-#         plot.pause(0.001)
-#         plot.gcf().clear()
-#
-#        # print("Fitness: ",pso.gbest_fitness)
-#     print("Best Fitness Achieved: ",pso.gbest_fitness)
-#     print(pso.gbest)
+if __name__ == "__main__":
+    from dataset import DatasetLoader
+    seeds = DatasetLoader.load("glass")
 
-#for particle in pso.particles:
-#    print(particle)
+    #x,y = sk_data.make_blobs(100,n_features,nclusters, cluster_std=1, random_state=1)
+    g_factor = 2
+    p_factor = 1.5
+    inertia=0.8
+    n_particles=10
+    pso = PSO(seeds.num_inputs,seeds.num_outputs, seeds.X, seeds.CLASS_Y, p_factor,g_factor,inertia, n_particles)
+    pso.run()
+    # plot.ion()
+    # plot.show()
+    #
+    # cmap = plot.cm.get_cmap('brg', 10)
+    #
+    # for epoch in pso.run():
+    #    # pso.run()
+    #     for i in range(len(pso.particles)):
+    #         for center in pso.particles[i].current_state:
+    #             plot.scatter(center[0],center[1], c=cmap(i), s=3)
+    #             plot.scatter([p[0] for p in x], [p[1] for p in x], color="blue")
+    #             g_best = pso.gbest
+    #             plot.scatter([p[0] for p in g_best], [p[1] for p in g_best], color="green")
+    #     plot.pause(0.001)
+    #     plot.gcf().clear()
+    #
+    #    # print("Fitness: ",pso.gbest_fitness)
+    print("Best Fitness Achieved: ",pso.gbest_fitness)
+    print(pso.gbest)

@@ -76,7 +76,7 @@ class CompetitiveLearningNeuralNetwork(ClusteringAlgorithm):
             epoch += 1
 
 
-ds = DatasetLoader.load("seeds")
+ds = DatasetLoader.load("glass")
 X, Y = ds.X, ds.CLASS_Y
 network = CompetitiveLearningNeuralNetwork(ds.num_inputs, ds.num_outputs, X, Y, 0.01)
 network.run(100000)
