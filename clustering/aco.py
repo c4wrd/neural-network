@@ -307,11 +307,11 @@ if __name__ == '__main__':
     # X, Y = sklearn.datasets.make_blobs(20, 2, 2, random_state=1)
     # X, Y = numpy.loadtxt('dataset_files/yeast.txt', usecols=range(7))
 
-    ds = DatasetLoader.load("seeds")
-    length = ds.size
-    dim = math.floor(math.sqrt(10*length))
-    neighborhood = math.ceil(math.sqrt(dim))
+    ds = DatasetLoader.load("ecoli")
     X, Y = ds.X, ds.CLASS_Y
-
-    colony = ACOCluster(X, Y, dim, dim, dim, 100000, neighborhood, 10, 100, path="Output/")
+    length = ds.size
+    dim = math.floor(math.sqrt(1*length))
+    neighborhood = math.ceil(math.sqrt(dim))
+    num_ants = int(0.1*ds.size)
+    colony = ACOCluster(X, Y, dim, dim, num_ants, 100000, neighborhood, 10, 100, path="Output//ecoli")
     colony.run()
