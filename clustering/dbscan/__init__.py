@@ -1,4 +1,4 @@
-from Datum import Datum
+from clustering.dbscan.Datum import Datum
 from sklearn import decomposition as dec
 from dataset import DatasetLoader
 from sklearn.preprocessing import normalize as norm
@@ -103,12 +103,13 @@ class DBSCAN:
                 pass
         plot.show()
 
-data = DatasetLoader.load('ecoli')
+if __name__ == "__main__":
+    data = DatasetLoader.load('ecoli')
 
-scanner = DBSCAN([data.X,data.CLASS_Y], .2, 4)   # .2,4
-scanner.classify_data()
-for d in scanner.data:
-    print("Datum Type: " ,d.get_type(), '\tDatum Class', d.get_classification(), '\tDatum Neighbors: ', len(d.neighbors))
-scanner.calculate_fitness()
-print("Clusters Found: ", scanner.clusters_found+1)
-scanner.plot_clusters()
+    scanner = DBSCAN([data.X,data.CLASS_Y], .2, 4)  # You may want to disable to shuffling in dataset.Dataset
+    scanner.classify_data()
+    for d in scanner.data:
+        print("Datum Type: " ,d.get_type(), '\tDatum Class', d.get_classification(), '\tDatum Neighbors: ', len(d.neighbors))
+    scanner.calculate_fitness()
+    print("Clusters Found: ", scanner.clusters_found+1)
+    scanner.plot_clusters()
