@@ -15,6 +15,7 @@ from clustering import ClusteringAlgorithm
 from heapq import heappush, heappop
 from clustering.kmeans import euclidean
 from collections import Counter
+from dataset import DatasetLoader
 
 class ACOCluster(ClusteringAlgorithm):
 
@@ -62,11 +63,13 @@ class ACOCluster(ClusteringAlgorithm):
                 predicted = []
                 actual = []
 
+                # Create an array of dead ants
                 for i in range(self.width):
                     for j in range(self.height):
                         if self.grid.grid[i][j] is not None:
                             dead_ants.append((self.grid.grid[i][j], (i, j)))
 
+                # Create heap and find k-closest neighbors to dead ant
                 for ant, coordinate in dead_ants:
                     da_heap = []
                     for other_ant, other_coord in dead_ants:
@@ -77,10 +80,11 @@ class ACOCluster(ClusteringAlgorithm):
                     predicted_label = [label for label, count in Counter(nearest_labels).most_common(1)][0]
                     predicted.append(predicted_label)
                     actual.append(ant.label)
+
+                # Calculate metrics and report to terminal
                 homogeneity = metrics.homogeneity_score(actual, predicted)
                 completeness = metrics.completeness_score(actual, predicted)
                 print("%d: completeness=%f, homogeneity=%f" % (i, completeness, homogeneity))
-
 
 
 class Grid:
@@ -300,8 +304,14 @@ class DeadAnt:
 
 
 if __name__ == '__main__':
-    X, Y = sklearn.datasets.make_blobs(20, 2, 2, random_state=1)
-        # normalize(numpy.loadtxt('seeds.txt', usecols=range(7)))
+    # X, Y = sklearn.datasets.make_blobs(20, 2, 2, random_state=1)
+    # X, Y = numpy.loadtxt('dataset_files/yeast.txt', usecols=range(7))
 
-    colony = ACOCluster(X, Y, 25, 25, 5, 100000, 5, 10, 500, path="Output/")
+    ds = DatasetLoader.load("seeds")
+    length = ds.size
+    dim = math.floor(math.sqrt(10*length))
+    neighborhood = math.ceil(math.sqrt(dim))
+    X, Y = ds.X, ds.CLASS_Y
+
+    colony = ACOCluster(X, Y, dim, dim, dim, 100000, neighborhood, 10, 100, path="Output/")
     colony.run()
