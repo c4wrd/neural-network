@@ -1,12 +1,13 @@
 import random as rand
 import math
-from sklearn.metrics import homogeneity_score as h_score
+import numpy as np
+from sklearn.metrics import homogeneity_score as h_score, completeness_score as c_score
 
 class Particle:
 
     def __init__(self, centers, features, f1, f2, w):
-        self.current_state = [[rand.random() for f in range(features)] for i in range(centers)]
-        self.velocity = [[0 for f in range(features)] for i in range(centers)]
+        self.current_state = np.random.uniform(-1, 1, (centers, features))#[np.random.uniform(features) for i in range(centers)]#[[rand.random() for f in range(features)] for i in range(centers)]
+        self.velocity = np.random.uniform(-1, 1, (centers, features)) # [np.random.rand(features) for i in range(centers)] #[[0 for f in range(features)] for i in range(centers)]
         self.personal_best = self.current_state
         self.factor1 = f1
         self.factor2 = f2
@@ -23,7 +24,7 @@ class Particle:
         for i in range(len(self.velocity)):
             self.velocity[i] = [self.inertia*v + self.factor1 * rand1 * (p-c) + self.factor2 * rand2 * (g-c)
                               for v,p,g,c
-                              in zip(self.velocity[i],self.personal_best[i],gbest.current_state[i],self.current_state[i])
+                              in zip(self.velocity[i],self.personal_best[i],gbest[i],self.current_state[i])
                             ]
 
     def euclidian_distance(self, target, center):
@@ -50,7 +51,7 @@ class Particle:
         data = dataset[0]
         class_center_pairs = [[label,center] for label,center in zip(labels,self.current_state)]
 
-        new_labels = []
+        new_assignments = []
         for d in data:
             for pair in class_center_pairs:
                 dist = None
@@ -58,14 +59,21 @@ class Particle:
                 if dist is None or dist > self.euclidian_distance(d,pair[1]):
                     dist = self.euclidian_distance(d,pair[1])
                     curr_label = pair[0]
-            new_labels.append(curr_label)
+            new_assignments.append((curr_label, dist))
 
-        fitness = h_score(dataset[1], new_labels)
+        new_fitness = 0
+        # calculate quantization error
+        for index, center in enumerate(self.current_state):
+            # create a list of all dataset items assigned to this cluster
+            assignments = [assignment for assignment in new_assignments if assignment[0] == index]
+            for assignment in assignments:
+                new_fitness += assignment[1] / len(assignments)
+        new_fitness /= len(self.current_state)
 
-        if self.fitness is None or self.fitness < fitness:
-            self.fitness = fitness
+        if self.fitness is None or self.fitness < new_fitness:
+            self.fitness = new_fitness
             self.personal_best = self.current_state
-        return fitness
+        return new_fitness
 
 
 

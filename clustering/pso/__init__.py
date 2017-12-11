@@ -24,35 +24,44 @@ class PSO:
             particle.calculate_fitness(self.data)
             fitness = particle.fitness
             if self.gbest is None or fitness > self.gbest_fitness:
-                self.gbest = particle
+                self.gbest = particle.current_state
                 self.gbest_fitness = fitness
 
     def run(self):
         for particle in self.particles:
             particle.update_velocity(self.gbest)
-            particle.update_current_state(0,1)
+            particle.update_current_state(-10,10)
         self.find_global_best()
 
-x,y = sk_data.make_blobs(100,2,2)
-test_data = [norm(x),y]
-pso = PSO(2,2,1,2,.5,10,test_data)
 
-plot.ion()
-plot.show()
+if __name__ == "__main__":
+    nclusters=4
 
-cmap = plot.cm.get_cmap('brg', 10)
+    x,y = sk_data.make_blobs(100,2,nclusters)
+    test_data = [x,y]
+    g_factor = 1.49
+    p_factor = 1.49
+    pso = PSO(nclusters,2,p_factor,g_factor,0.72,7,test_data)
 
-for i in range(100):
-    pso.run()
-    for i in range(len(pso.particles)):
-        for center in pso.particles[i].current_state:
-            plot.scatter(center[0],center[1], c=cmap(i), s=3)
-    plot.pause(0.001)
-    plot.gcf().clear()
+    plot.ion()
+    plot.show()
 
-    print("Fitness: ",pso.gbest_fitness)
-print("Best Fitness Achieved: ",pso.gbest_fitness)
-print(pso.gbest)
+    cmap = plot.cm.get_cmap('brg', 10)
+
+    for i in range(100):
+        pso.run()
+        for i in range(len(pso.particles)):
+            for center in pso.particles[i].current_state:
+                plot.scatter(center[0],center[1], c=cmap(i), s=3)
+                plot.scatter([p[0] for p in x], [p[1] for p in x], color="blue")
+                g_best = pso.gbest
+                plot.scatter([p[0] for p in g_best], [p[1] for p in g_best], color="green")
+        plot.pause(0.001)
+        plot.gcf().clear()
+
+        print("Fitness: ",pso.gbest_fitness)
+    print("Best Fitness Achieved: ",pso.gbest_fitness)
+    print(pso.gbest)
 
 #for particle in pso.particles:
 #    print(particle)
