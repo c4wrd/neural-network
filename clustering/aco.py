@@ -8,10 +8,13 @@ import scipy.spatial.distance as scidist
 import matplotlib.pylab as plt
 from sklearn.preprocessing import normalize
 import sklearn.datasets
-import sklearn.metrics
+from sklearn import metrics
+import sklearn.neighbors as skneigh
 
 from clustering import ClusteringAlgorithm
-
+from heapq import heappush, heappop
+from clustering.kmeans import euclidean
+from collections import Counter
 
 class ACOCluster(ClusteringAlgorithm):
 
@@ -55,6 +58,29 @@ class ACOCluster(ClusteringAlgorithm):
                 s = "img" + str(i)
                 self.grid.plot(s)
                 # compute scores
+                dead_ants = []
+                predicted = []
+                actual = []
+
+                for i in range(self.width):
+                    for j in range(self.height):
+                        if self.grid.grid[i][j] is not None:
+                            dead_ants.append((self.grid.grid[i][j], (i, j)))
+
+                for ant, coordinate in dead_ants:
+                    da_heap = []
+                    for other_ant, other_coord in dead_ants:
+                        if ant != other_ant:
+                            da_heap.append((other_ant, euclidean(coordinate, other_coord)))
+                    nearest_neightbors = sorted(da_heap,key=lambda x: x[1])[:self.n]
+                    nearest_labels = [a[0].label for a in nearest_neightbors]
+                    predicted_label = [label for label, count in Counter(nearest_labels).most_common(1)][0]
+                    predicted.append(predicted_label)
+                    actual.append(ant.label)
+                homogeneity = metrics.homogeneity_score(actual, predicted)
+                completeness = metrics.completeness_score(actual, predicted)
+                print("%d: completeness=%f, homogeneity=%f" % (i, completeness, homogeneity))
+
 
 
 class Grid:
