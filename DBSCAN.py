@@ -1,5 +1,6 @@
 from Datum import Datum
 from sklearn import decomposition as dec
+from dataset import DatasetLoader
 from sklearn.preprocessing import normalize as norm
 import matplotlib.pyplot as plot
 
@@ -60,16 +61,15 @@ class DBSCAN:
             else:
                 for neighbor in core.neighbors:
                     neighbor.set_classification(core.get_classification())
-                saved_class = current_class
                 current_class = core.get_classification()
                 increment_class = False
 
             if increment_class:
                 current_class += 1
+                self.clusters_found = current_class if current_class > self.clusters_found else self.clusters_found
                 core.set_classification(current_class)
                 for neighbor in core.neighbors:
                     neighbor.set_classification(core.get_classification())
-        self.clusters_found = current_class
 
     def calculate_fitness(self):
         fitness = []
@@ -103,18 +103,12 @@ class DBSCAN:
                 pass
         plot.show()
 
+data = DatasetLoader.load('ecoli')
 
-seeds = open('datasets/seeds_dataset.txt', 'r')
-data = [seed.split('\t') for seed in seeds]
-for i in range(len(data)):
-    data[i] = [float(d) for d in data[i] if d != '']
-classes = [d[-1] for d in data]
-data = [d[:-1] for d in data]
-#data = norm(data)
-
-scanner = DBSCAN([data,classes], .85, 10)
+scanner = DBSCAN([data.X,data.CLASS_Y], .2, 4)   # .2,4
 scanner.classify_data()
 for d in scanner.data:
     print("Datum Type: " ,d.get_type(), '\tDatum Class', d.get_classification(), '\tDatum Neighbors: ', len(d.neighbors))
 scanner.calculate_fitness()
+print("Clusters Found: ", scanner.clusters_found+1)
 scanner.plot_clusters()

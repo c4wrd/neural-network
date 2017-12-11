@@ -63,12 +63,12 @@ class PSO(ClusteringAlgorithm):
 
 if __name__ == "__main__":
     from dataset import DatasetLoader
-    seeds = DatasetLoader.load("glass")
+    seeds = DatasetLoader.load("yeast")
 
     #x,y = sk_data.make_blobs(100,n_features,nclusters, cluster_std=1, random_state=1)
     g_factor = 2
-    p_factor = 1.5
-    inertia=0.8
+    p_factor = 1
+    inertia=0.9
     n_particles=10
     pso = PSO(seeds.num_inputs,seeds.num_outputs, seeds.X, seeds.CLASS_Y, p_factor,g_factor,inertia, n_particles)
     pso.run()
